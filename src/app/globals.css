@@ -1,0 +1,317 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Tokens
+   ------------------------------------------------------------------ */
+:root {
+  --obsidian: #08090c;
+  --graphite: #121419;
+  --graphite-2: #1a1d24;
+  --hairline: #262932;
+  --bone: #ede7dc;
+  --bone-dim: #cfc8bc;
+  --ash: #9a968e;
+  --ultra: #3550ff;
+  --ultra-text: #7c8bff;
+  --field: #1f33cc;
+  --field-deep: #1828a8;
+  --field-muted: #c9cfff;
+
+  --gutter: clamp(1.25rem, 4.2vw, 4rem);
+  --stroke: clamp(6px, 0.62vw, 11px);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@theme inline {
+  --color-obsidian: var(--obsidian);
+  --color-graphite: var(--graphite);
+  --color-graphite-2: var(--graphite-2);
+  --color-hairline: var(--hairline);
+  --color-bone: var(--bone);
+  --color-bone-dim: var(--bone-dim);
+  --color-ash: var(--ash);
+  --color-ultra: var(--ultra);
+  --color-ultra-text: var(--ultra-text);
+  --color-field: var(--field);
+  --color-field-deep: var(--field-deep);
+  --color-field-muted: var(--field-muted);
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-shoulders), "Arial Narrow", sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  background: var(--obsidian);
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--obsidian);
+  color: var(--bone);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+
+/* Film grain over everything: a single static texture, no animation */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.075;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+::selection {
+  background: var(--ultra);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ultra-text);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.on-field :focus-visible {
+  outline-color: var(--bone);
+}
+
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* ------------------------------------------------------------------
+   Type
+   ------------------------------------------------------------------ */
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 850;
+  text-transform: uppercase;
+  line-height: 0.82;
+  letter-spacing: -0.012em;
+}
+
+.display-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ash);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-variation-settings: "wdth" 80;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  color: var(--ash);
+}
+
+.lead {
+  font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.6rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+/* ------------------------------------------------------------------
+   Layout
+   ------------------------------------------------------------------ */
+.wrap {
+  padding-inline: var(--gutter);
+}
+
+.chapter {
+  position: relative;
+  padding-block: clamp(6rem, 13vw, 11rem);
+}
+
+/* ------------------------------------------------------------------
+   Controls
+   ------------------------------------------------------------------ */
+.btn {
+  --btn-bg: var(--ultra);
+  --btn-fg: #fff;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 52px;
+  padding: 0.8rem 1.3rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 600;
+  font-variation-settings: "wdth" 92;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  user-select: none;
+  touch-action: manipulation;
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: 70ms;
+}
+
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--bone);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+
+.btn-bone {
+  --btn-bg: var(--bone);
+  --btn-fg: var(--obsidian);
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    --btn-bg: #4a63ff;
+  }
+  .btn-ghost:hover {
+    --btn-bg: var(--graphite-2);
+    box-shadow: inset 0 0 0 1px var(--ash);
+  }
+  .btn-bone:hover {
+    --btn-bg: #fff;
+  }
+  .on-field .btn-ghost:hover {
+    --btn-bg: var(--field-deep);
+  }
+}
+
+.on-field .btn-ghost {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bone) 40%, transparent);
+}
+
+.link {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition: text-decoration-color 200ms var(--ease-out);
+}
+
+@media (hover: hover) {
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ------------------------------------------------------------------
+   The radical: the site's signature mark
+   ------------------------------------------------------------------ */
+/* The stroke has a non-scaling width, so it's revealed with a wipe (left to
+   right, the way the sign is written) rather than a dash offset. */
+.mark .radical-glyph {
+  clip-path: inset(-20% 100% -20% -20%);
+  transition: clip-path 700ms var(--ease-in-out);
+}
+.mark .radical-bar {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 700ms var(--ease-out) 380ms;
+}
+.mark[data-in] .radical-glyph {
+  clip-path: inset(-20% -20% -20% -20%);
+}
+.mark[data-in] .radical-bar {
+  transform: scaleX(1);
+}
+
+/* Hero opening: only when the layout script adds .intro (first visit in a
+   session, motion allowed). Without it, everything is simply there. */
+.intro .hero-glyph {
+  clip-path: inset(-20% 100% -20% -20%);
+  animation: wipe 760ms var(--ease-in-out) 120ms forwards;
+}
+.intro .hero-bar {
+  transform: scaleX(0);
+  animation: grow 900ms var(--ease-out) 700ms forwards;
+}
+.intro .hero-letter {
+  transform: translateY(108%);
+  animation: rise 900ms var(--ease-out) calc(260ms + var(--i) * 45ms) forwards;
+}
+.intro .hero-fade {
+  opacity: 0;
+  animation: appear 600ms var(--ease-out) 900ms forwards;
+}
+
+@keyframes wipe {
+  to {
+    clip-path: inset(-20% -20% -20% -20%);
+  }
+}
+@keyframes grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes rise {
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark .radical-glyph,
+  .mark .radical-bar {
+    transition: none;
+    clip-path: none;
+    transform: none;
+  }
+  .btn {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .translucent {
+    backdrop-filter: none !important;
+    background: var(--obsidian) !important;
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--bone);
+  color: var(--obsidian);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
