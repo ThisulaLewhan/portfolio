@@ -23,7 +23,8 @@ export const site = {
   lastName: "Lewhan",
   location: "Colombo, Sri Lanka",
   identity: "Entrepreneur. Founder of Skyradix.",
-  title: "Thisula Lewhan, entrepreneur and founder of Skyradix",
+  /** The browser tab and share title: just the name. */
+  title: "Thisula Lewhan",
   description:
     "Thisula Lewhan is an entrepreneur and the founder of Skyradix, building his own path through business and technology from Colombo, Sri Lanka.",
 
@@ -40,6 +41,8 @@ export const site = {
     /** Published on github.com/ThisulaLewhan. */
     email: "ntlewhan@gmail.com",
     linkedin: "https://www.linkedin.com/in/thisula-lewhan",
+    /** Linked from github.com/ThisulaLewhan. */
+    instagram: "https://www.instagram.com/thisula._",
     skyradix: "https://www.skyradix.com",
   },
 

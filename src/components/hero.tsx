@@ -12,8 +12,8 @@ import { Arrow } from "./icons";
  * Below 1280px the poster keeps the name and portrait, and the details move
  * into a band underneath; below 1024px the name stacks on two lines.
  *
- * Entrance (about 1.1s, nothing waits on it): the name rises out of its
- * lines, the portrait settles up into place, then the details follow.
+ * Entrance (about 1.2s, nothing waits on it): the portrait settles into place
+ * first, then the name rises up from behind it and the details follow.
  */
 export function Hero() {
   return (
@@ -24,12 +24,12 @@ export function Hero() {
 
         <h1 id="hero-name" className="hero-name t-display absolute inset-x-[var(--margin)] z-0">
           <span className="block overflow-hidden pb-[0.06em] lg:inline-block">
-            <span className="rise" style={{ "--d": 40 } as React.CSSProperties}>
+            <span className="rise" style={{ "--d": 280 } as React.CSSProperties}>
               {site.firstName}
             </span>
           </span>
           <span className="block overflow-hidden pb-[0.06em] text-right lg:inline-block">
-            <span className="rise" style={{ "--d": 140 } as React.CSSProperties}>
+            <span className="rise" style={{ "--d": 300 } as React.CSSProperties}>
               {site.lastName}
               <span className="text-red">.</span>
             </span>

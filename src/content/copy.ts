@@ -1,6 +1,7 @@
 /** All page copy, in Thisula's words. Edit freely. */
 
 export const nav = [
+  { id: "top", label: "Home" },
   { id: "about", label: "About" },
   { id: "skyradix", label: "Skyradix" },
   { id: "background", label: "Background" },

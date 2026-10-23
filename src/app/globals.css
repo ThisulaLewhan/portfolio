@@ -77,6 +77,44 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Scrollbar: slim, and it takes the colour of the surface under the nav
+   (the nav sets data-surface on <html> as you scroll). */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #b9b5ad var(--paper);
+}
+
+html[data-surface="dark"] {
+  scrollbar-color: #3d3d3d var(--night);
+}
+
+/* Safari and older Chromium */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+  background: #b9b5ad;
+  border-radius: 999px;
+  border: 3px solid var(--paper);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8d8a84;
+}
+html[data-surface="dark"] ::-webkit-scrollbar-track {
+  background: var(--night);
+}
+html[data-surface="dark"] ::-webkit-scrollbar-thumb {
+  background: #3d3d3d;
+  border-color: var(--night);
+}
+html[data-surface="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #5a5a5a;
+}
+
 ::selection {
   background: var(--red);
   color: #fff;
@@ -387,7 +425,8 @@ body {
    sits centred in the gap between "Thisula" and "Lewhan.":
      "Thisula" is 2.8826 × the font size wide, "Lewhan." 3.4549 ×
      the cut-out is 0.9855 as wide as it is tall
-     the head is 31% of the image width, centred 44.2% across
+     where the name crosses it, the face spans 34.5% to 57.5% of the image
+     width (wider at the hair), centred 46.25% across
    The hero is a size container, so 100cqw is its exact width (no scrollbar).
    ------------------------------------------------------------------ */
 .hero {
@@ -463,12 +502,15 @@ body {
     --PH: max(34rem, min(100svh, 112cqw));
     --IH: calc(var(--PH) * 0.86);
     --W: calc(100cqw - 2 * var(--margin));
-    /* gap = 40% of the portrait's width: the head plus air on both sides */
-    --G: calc(var(--IW) * 0.4);
-    --F: min(12.4cqw, calc((var(--W) - var(--G)) / 6.3375));
+    /* gap = 20.5% of the portrait's width, a little narrower than the face
+       where the name crosses it, so the "a" and the "L" tuck just behind */
+    --G: calc(var(--IW) * 0.205);
+    /* the name fills the width around the gap; capped by height on very wide screens */
+    --F: min(calc(var(--PH) * 0.32), calc((var(--W) - var(--G)) / 6.3375));
     /* centre of the gap = left margin + "Thisula" + half the remaining space */
     --gap-x: calc(var(--margin) + var(--F) * 2.8826 + (var(--W) - var(--F) * 6.3375) / 2);
-    --fig-left: calc(var(--gap-x) - var(--IW) * 0.442);
+    /* the face, where the name crosses it, is centred 46.25% across the image */
+    --fig-left: calc(var(--gap-x) - var(--IW) * 0.4625);
   }
   .hero-name {
     display: flex;
@@ -494,16 +536,15 @@ body {
   }
 }
 
-/* Portrait settles up into place as the name rises */
+/* The portrait arrives first; the name then rises from behind it */
 .hero-figure img {
-  animation: portrait-in var(--dur-4) var(--ease-out) both;
-  animation-delay: 150ms;
+  animation: portrait-in 700ms var(--ease-out) both;
 }
 
 @keyframes portrait-in {
   from {
     opacity: 0;
-    transform: translateY(3%);
+    transform: translateY(2%);
   }
 }
 
@@ -511,8 +552,9 @@ body {
    Motion
    ------------------------------------------------------------------ */
 
-/* Hero entrance (~1.1s end to end, never blocks input).
-   Nav 0 to 250ms, name 40 to 1000ms, details 280 to 900ms, footer row ~1100ms. */
+/* Hero entrance (~1.2s end to end, never blocks input).
+   Portrait 0 to 700ms, then the name rises from behind it (280 to 1200ms);
+   nav and details fade in alongside. */
 .enter-fade {
   animation: enter-fade var(--dur-2) var(--ease-out) both;
   animation-delay: calc(var(--d, 0) * 1ms);

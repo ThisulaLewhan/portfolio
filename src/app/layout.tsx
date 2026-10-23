@@ -44,8 +44,9 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-/** Marks the page as scripted, so reveal animations only hide content when JS can show it again. */
-const jsFlag = `document.documentElement.classList.add("js")`;
+/** Marks the page as scripted (so reveals only hide content JS can show again)
+ *  and starts the scrollbar on the dark hero surface. */
+const jsFlag = `document.documentElement.classList.add("js");document.documentElement.dataset.surface="dark"`;
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -55,7 +56,7 @@ const personJsonLd = {
   jobTitle: "Founder",
   worksFor: { "@type": "Organization", name: "Skyradix", url: site.links.skyradix },
   address: { "@type": "PostalAddress", addressLocality: "Colombo", addressCountry: "LK" },
-  sameAs: [site.links.linkedin].filter(Boolean),
+  sameAs: [site.links.linkedin, site.links.instagram].filter(Boolean),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

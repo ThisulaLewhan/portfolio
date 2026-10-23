@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { site } from "@/config/site";
 import { nav } from "@/content/copy";
 import { spring } from "@/lib/motion";
+import { LogoMark } from "./logo";
 
 type NavId = (typeof nav)[number]["id"];
 
@@ -29,12 +30,16 @@ function useActiveSection(): { active: NavId | null; overDark: boolean; atTop: b
       }
       setActive(current);
       // Any section marked data-surface="dark" under the nav's midline
-      setOverDark(
-        [...document.querySelectorAll<HTMLElement>('[data-surface="dark"]')].some((el) => {
+      const darkSections = [...document.querySelectorAll<HTMLElement>('section[data-surface="dark"]')];
+      const darkAt = (y: number) =>
+        darkSections.some((el) => {
           const r = el.getBoundingClientRect();
-          return r.top <= 44 && r.bottom >= 44;
-        }),
-      );
+          return r.top <= y && r.bottom >= y;
+        });
+      // The nav reads the surface under itself; the scrollbar, which runs the
+      // full height of the window, follows whatever fills the middle of it.
+      setOverDark(darkAt(44));
+      document.documentElement.dataset.surface = darkAt(window.innerHeight / 2) ? "dark" : "light";
       setAtTop(window.scrollY < 8);
     };
     const schedule = () => {
@@ -93,7 +98,7 @@ export function Nav() {
           href="#top"
           className={`${surface} flex h-11 items-center gap-2 rounded-full pr-4 pl-3 text-[0.94rem] font-semibold tracking-[-0.015em] transition-colors duration-300`}
         >
-          <span aria-hidden className="size-2.5 bg-red" />
+          <LogoMark className="h-[15px] w-auto" />
           {site.name}
         </a>
 

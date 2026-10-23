@@ -1,6 +1,7 @@
 import { mailto, prettyUrl, site } from "@/config/site";
 import { contact, footer } from "@/content/copy";
 import { CopyButton } from "./copy-button";
+import { LogoMark } from "./logo";
 import { Arrow, ArrowUpRight } from "./icons";
 import { SectionHead } from "./section-head";
 
@@ -10,10 +11,11 @@ import { SectionHead } from "./section-head";
  * warmest thing on the page.
  */
 export function Contact() {
-  const { email, linkedin, skyradix } = site.links;
+  const { email, linkedin, instagram, skyradix } = site.links;
   const routes = [
     email && { label: "Email", value: email, href: mailto(email, "Hello Thisula"), external: false },
     linkedin && { label: "LinkedIn", value: prettyUrl(linkedin).replace("linkedin.com/", ""), href: linkedin, external: true },
+    instagram && { label: "Instagram", value: "@" + prettyUrl(instagram).replace("instagram.com/", ""), href: instagram, external: true },
     skyradix && { label: "Skyradix", value: prettyUrl(skyradix), href: skyradix, external: true },
   ].filter(Boolean) as { label: string; value: string; href: string; external: boolean }[];
 
@@ -83,18 +85,28 @@ export function Contact() {
 }
 
 export function Footer() {
-  const { email, linkedin, skyradix } = site.links;
+  const { email, linkedin, instagram, skyradix } = site.links;
   return (
     <footer className="frame border-t border-rule py-8">
       <div className="grid-12 gap-y-4">
-        <p className="t-meta col-span-4 text-ink-2 md:col-span-6">
-          &copy; {site.copyrightYear} {site.name}. {footer}
+        <p className="t-meta col-span-4 flex items-center gap-3 text-ink-2 md:col-span-6">
+          <LogoMark className="h-4 w-auto text-ink" />
+          <span>
+            &copy; {site.copyrightYear} {site.name}. {footer}
+          </span>
         </p>
         <ul className="t-meta col-span-4 flex flex-wrap gap-x-6 gap-y-2 md:col-span-6 md:justify-end">
           {linkedin && (
             <li>
               <a href={linkedin} target="_blank" rel="noopener noreferrer" className="u-link inline-flex min-h-11 items-center">
                 LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+          )}
+          {instagram && (
+            <li>
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="u-link inline-flex min-h-11 items-center">
+                Instagram<span className="sr-only"> (opens in a new tab)</span>
               </a>
             </li>
           )}

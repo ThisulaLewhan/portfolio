@@ -1,5 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#F3F1EC"/>
-  <text x="9" y="45" font-family="Inter Tight, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="-2" fill="#16171A">TL</text>
-  <rect x="47" y="38" width="7" height="7" fill="#D42A1E"/>
+  <circle cx="32" cy="32" r="31.5" fill="#FFFFFF"/>
+  <circle cx="32" cy="32" r="31" fill="none" stroke="#24272B" stroke-opacity="0.12" stroke-width="1"/>
+  <svg x="12" y="16" width="40" height="32" viewBox="180 367 1388 1102">
+    <polygon points="180,555 309,367 828,367 828,935 641,803 641,555" fill="#24272B"/>
+    <polygon points="641,929 828,1059 828,1468 641,1337" fill="#24272B"/>
+    <polygon points="1567,555 1438,367 919,367 919,935 1106,803 1106,555" fill="#E02436"/>
+    <polygon points="1106,929 919,1059 919,1468 1106,1337" fill="#E02436"/>
+  </svg>
 </svg>

@@ -1,10 +1,12 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/config/site";
+import { LOGO_LEFT, LOGO_RED, LOGO_RIGHT, LOGO_VIEWBOX } from "@/components/logo";
 
 export const alt = "Thisula Lewhan, entrepreneur and founder of Skyradix";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+/** The share card mirrors the hero: dark, an overhead light, the name in white, the monogram. */
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -15,21 +17,25 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#F3F1EC",
-          color: "#16171A",
-          padding: "64px 72px 56px",
+          background: "radial-gradient(ellipse 60% 70% at 50% 30%, #262626 0%, #0a0a0a 70%)",
+          color: "#f7f7f5",
+          padding: "64px 72px 60px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 34 }}>
-          <div style={{ width: 18, height: 18, background: "#D42A1E" }} />
-          {site.identity}
+        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+          <svg width="76" height="60" viewBox={LOGO_VIEWBOX}>
+            {LOGO_LEFT.map((p) => (
+              <polygon key={p} points={p} fill="#ffffff" />
+            ))}
+            {LOGO_RIGHT.map((p) => (
+              <polygon key={p} points={p} fill={LOGO_RED} />
+            ))}
+          </svg>
+          <div style={{ fontSize: 30, color: "#a3a09a" }}>{site.identity}</div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", fontSize: 196, fontWeight: 700, letterSpacing: -10, lineHeight: 0.86 }}>
-          <div style={{ display: "flex" }}>{site.firstName}</div>
-          <div style={{ display: "flex", paddingLeft: 260 }}>
-            {site.lastName}
-            <span style={{ color: "#D42A1E" }}>.</span>
-          </div>
+        <div style={{ display: "flex", fontSize: 150, fontWeight: 700, letterSpacing: -7, lineHeight: 0.9 }}>
+          {site.firstName}&nbsp;{site.lastName}
+          <span style={{ color: LOGO_RED, marginLeft: -12 }}>.</span>
         </div>
       </div>
     ),
