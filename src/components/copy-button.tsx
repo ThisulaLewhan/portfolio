@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { fade, spring } from "@/lib/motion";
 
 /** Copies a value and confirms in place, with the same label it started with. */
-export function CopyButton({ value, label, className = "btn btn-ghost" }: { value: string; label: string; className?: string }) {
+export function CopyButton({ value, label, className = "btn btn-line" }: { value: string; label: string; className?: string }) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
   const reduce = useReducedMotion();
   const timer = useRef<number | undefined>(undefined);

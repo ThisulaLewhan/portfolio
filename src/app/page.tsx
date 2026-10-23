@@ -1,26 +1,29 @@
 import { About } from "@/components/about";
+import { Background } from "@/components/background";
 import { Contact, Footer } from "@/components/contact";
-import { Groundwork } from "@/components/groundwork";
 import { Hero } from "@/components/hero";
 import { Nav } from "@/components/nav";
-import { Person } from "@/components/person";
-import { Perspective } from "@/components/perspective";
+import { Notes } from "@/components/notes";
+import { Reveals } from "@/components/reveals";
 import { Skyradix } from "@/components/skyradix";
+import { Values } from "@/components/values";
+import { site } from "@/config/site";
 
 export default function Home() {
   return (
     <>
       <Nav />
-      <Hero />
       <main id="main" tabIndex={-1} className="outline-none">
+        <Hero />
         <About />
-        <Perspective />
         <Skyradix />
-        <Groundwork />
-        <Person />
+        <Values />
+        <Background />
+        {site.showNotes && <Notes />}
         <Contact />
       </main>
       <Footer />
+      <Reveals />
     </>
   );
 }

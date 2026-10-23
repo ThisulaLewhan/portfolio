@@ -1,92 +1,80 @@
-import { mailto, site } from "@/config/site";
+import { mailto, prettyUrl, site } from "@/config/site";
+import { contact, footer } from "@/content/copy";
 import { CopyButton } from "./copy-button";
-import { UnderRoot } from "./radical";
+import { Arrow, ArrowUpRight } from "./icons";
+import { SectionHead } from "./section-head";
 
-type Route = { who: string; action: string; href: string; detail: string; external?: boolean };
-
-/** The bookend: the page opens with √ THISULA LEWHAN and closes with √ LET'S TALK. */
+/**
+ * The ending. A red Swiss circle grows into place as the section arrives,
+ * and a frosted panel sits over it, so the invitation reads as the last,
+ * warmest thing on the page.
+ */
 export function Contact() {
-  const { personalEmail, businessEmail } = site.contact;
+  const { email, linkedin, skyradix } = site.links;
   const routes = [
-    businessEmail && {
-      who: "A project or a business problem",
-      action: "Email Skyradix",
-      href: mailto(businessEmail, "Project enquiry"),
-      detail: businessEmail,
-    },
-    personalEmail && {
-      who: "An idea, a collaboration, a partnership",
-      action: "Email me",
-      href: mailto(personalEmail, "Let's talk"),
-      detail: personalEmail,
-    },
-    site.social.linkedin.href && {
-      who: "Professional connections",
-      action: "LinkedIn",
-      href: site.social.linkedin.href,
-      detail: site.social.linkedin.handle,
-      external: true,
-    },
-    site.social.instagram.href && {
-      who: "We just met, or you'd like to say hello",
-      action: "Instagram",
-      href: site.social.instagram.href,
-      detail: site.social.instagram.handle,
-      external: true,
-    },
-  ].filter(Boolean) as Route[];
+    email && { label: "Email", value: email, href: mailto(email, "Hello Thisula"), external: false },
+    linkedin && { label: "LinkedIn", value: prettyUrl(linkedin).replace("linkedin.com/", ""), href: linkedin, external: true },
+    skyradix && { label: "Skyradix", value: prettyUrl(skyradix), href: skyradix, external: true },
+  ].filter(Boolean) as { label: string; value: string; href: string; external: boolean }[];
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="chapter relative overflow-hidden border-t border-hairline">
-      <div className="wrap">
-        <p className="label">Contact</p>
-        <h2 id="contact-title" className="display mt-6 text-[clamp(4.4rem,17vw,16rem)]">
-          <UnderRoot bleed>Let&rsquo;s talk</UnderRoot>
-        </h2>
+    <section id="contact" aria-labelledby="contact-title" className="section frame relative overflow-hidden border-t border-rule">
+      <SectionHead index="07" label="Contact" heading={contact.heading} id="contact-title" />
 
-        <div className="mt-20 grid gap-14 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <p className="lead max-w-[26ch] text-bone-dim">
-              Whatever brought you here, a business, an idea or a conversation, pick the route that fits.
-            </p>
-            {personalEmail && (
-              <div className="mt-8">
-                <p className="text-[1.15rem] font-medium break-all select-all">{personalEmail}</p>
-                <div className="mt-4">
-                  <CopyButton value={personalEmail} label="Copy my email" />
+      <div className="relative mt-14 md:mt-20">
+        {/* The circle sits on the grid's right edge; the panel overlaps it */}
+        <div
+          aria-hidden
+          className="grow-in pointer-events-none absolute top-[-6%] right-[-22vw] aspect-square w-[78vw] rounded-full bg-red md:top-[-14%] md:right-[-4vw] md:w-[min(46vw,40rem)]"
+        />
+
+        <div className="grid-12 relative">
+          <div data-reveal className="glass col-span-4 rounded-[18px] p-7 sm:p-10 md:col-span-9 md:col-start-4 lg:col-span-7 lg:col-start-4">
+            <div className="grid gap-2 text-[1.12rem] text-ink-2">
+              {contact.lines.map((l) => (
+                <p key={l} className="measure">
+                  {l}
+                </p>
+              ))}
+            </div>
+
+            {email && (
+              <div className="mt-10">
+                <a
+                  href={mailto(email, "Hello Thisula")}
+                  className="t-h3 u-link u-link-static inline-block max-w-full break-all"
+                >
+                  {email}
+                </a>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <a href={mailto(email, "Hello Thisula")} className="btn btn-ink">
+                    Write to me
+                    <Arrow className="arrow" />
+                  </a>
+                  <CopyButton value={email} label="Copy address" className="btn btn-line bg-white/50" />
                 </div>
               </div>
             )}
-          </div>
 
-          <ul className="lg:col-span-7 lg:col-start-6">
-            {routes.map((r) => (
-              <li key={r.action} className="border-b border-hairline first:border-t">
-                <a
-                  href={r.href}
-                  {...(r.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group grid grid-cols-[1fr_auto] items-end gap-x-6 py-7 transition-colors duration-300 active:bg-graphite"
-                >
-                  <span className="min-w-0">
-                    <span className="block text-ash">{r.who}</span>
-                    <span className="display mt-2 block text-[clamp(2.4rem,1.6rem+3vw,4.2rem)] transition-colors duration-300 group-hover:text-ultra-text">
-                      {r.action}
-                    </span>
-                    <span className="mt-2 block truncate text-[0.92rem] text-ash">{r.detail}</span>
-                  </span>
-                  <span
-                    aria-hidden
-                    className="mb-2 grid size-12 place-items-center rounded-full border border-hairline transition-[background-color,border-color,transform] duration-300 group-hover:-rotate-45 group-hover:border-ultra group-hover:bg-ultra"
+            <ul className="mt-10 border-t border-ink/10">
+              {routes.map((r) => (
+                <li key={r.label} className="border-b border-ink/10">
+                  <a
+                    href={r.href}
+                    {...(r.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="group grid min-h-14 grid-cols-[4.75rem_1fr_auto] sm:grid-cols-[6.5rem_1fr_auto] items-center gap-4 py-3"
                   >
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                      <path d="M3 9h11M10 4.5 14.5 9 10 13.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                  {r.external && <span className="sr-only">(opens in a new tab)</span>}
-                </a>
-              </li>
-            ))}
-          </ul>
+                    <span className="t-meta text-ink-2">{r.label}</span>
+                    <span className="truncate font-medium">
+                      <span className="u-link">{r.value}</span>
+                    </span>
+                    {r.external ? <ArrowUpRight className="arrow" /> : <Arrow className="arrow" />}
+                    {r.external && <span className="sr-only">(opens in a new tab)</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -94,37 +82,37 @@ export function Contact() {
 }
 
 export function Footer() {
+  const { email, linkedin, skyradix } = site.links;
   return (
-    <footer className="wrap border-t border-hairline py-10 text-[0.95rem] text-ash">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <p>
-          <span className="font-semibold text-bone">{site.name}</span>
-          <br />
-          Founder of{" "}
-          <a href={site.skyradix.url} target="_blank" rel="noopener noreferrer" className="link">
-            Skyradix
-          </a>
-          , {site.location}
+    <footer className="frame border-t border-rule py-8">
+      <div className="grid-12 gap-y-4">
+        <p className="t-meta col-span-4 text-ink-2 md:col-span-6">
+          &copy; {site.copyrightYear} {site.name}. {footer}
         </p>
-        <ul className="flex flex-wrap gap-x-6">
-          {Object.values(site.social)
-            .filter((s) => s.href)
-            .map((s) => (
-              <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="link inline-flex min-h-11 items-center">
-                  {s.label}
-                  <span className="sr-only"> (opens in a new tab)</span>
-                </a>
-              </li>
-            ))}
-          <li>
-            <a href="#top" className="link inline-flex min-h-11 items-center">
-              Back to the top
-            </a>
-          </li>
+        <ul className="t-meta col-span-4 flex flex-wrap gap-x-6 gap-y-2 md:col-span-6 md:justify-end">
+          {linkedin && (
+            <li>
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="u-link inline-flex min-h-11 items-center">
+                LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+          )}
+          {skyradix && (
+            <li>
+              <a href={skyradix} target="_blank" rel="noopener noreferrer" className="u-link inline-flex min-h-11 items-center">
+                Skyradix<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+          )}
+          {email && (
+            <li>
+              <a href={mailto(email)} className="u-link inline-flex min-h-11 items-center">
+                Email
+              </a>
+            </li>
+          )}
         </ul>
       </div>
-      <p className="mt-8 text-[0.85rem]">&copy; {site.copyrightYear} {site.name}</p>
     </footer>
   );
 }

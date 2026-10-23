@@ -1,19 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Big_Shoulders, Instrument_Sans } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import { site } from "@/config/site";
 import "./globals.css";
 
-const shoulders = Big_Shoulders({
-  variable: "--font-shoulders",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   axes: ["opsz"],
   display: "swap",
 });
 
-const instrument = Instrument_Sans({
-  variable: "--font-instrument",
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
-  axes: ["wdth"],
   display: "swap",
 });
 
@@ -41,12 +40,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08090c",
-  colorScheme: "dark",
+  themeColor: "#f3f1ec",
+  colorScheme: "light",
 };
 
-/** Plays the opening sequence once per session, and never with reduced motion. */
-const introScript = `try{var k="tl-intro";if(!sessionStorage.getItem(k)&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro")}sessionStorage.setItem(k,"1")}catch(e){}`;
+/** Marks the page as scripted, so reveal animations only hide content when JS can show it again. */
+const jsFlag = `document.documentElement.classList.add("js")`;
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -54,23 +53,22 @@ const personJsonLd = {
   name: site.name,
   ...(site.url ? { url: site.url } : {}),
   jobTitle: "Founder",
-  worksFor: { "@type": "Organization", name: site.skyradix.name, url: site.skyradix.url },
-  affiliation: { "@type": "CollegeOrUniversity", name: "Sri Lanka Institute of Information Technology" },
+  worksFor: { "@type": "Organization", name: "Skyradix", url: site.links.skyradix },
   address: { "@type": "PostalAddress", addressLocality: "Colombo", addressCountry: "LK" },
-  sameAs: [site.social.linkedin.href, site.social.instagram.href, site.social.github.href],
+  sameAs: [site.links.linkedin].filter(Boolean),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // The intro script may add a class to <html> before hydration.
+    // The inline script adds a class to <html> before hydration.
     <html
       lang="en"
-      className={`${shoulders.variable} ${instrument.variable}`}
+      className={`${inter.variable} ${interTight.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: introScript }} />
+        <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
       </head>
       <body>
         <a href="#main" className="skip-link">

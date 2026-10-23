@@ -1,6 +1,6 @@
 # Thisula Lewhan: personal site
 
-"Radix" is a dark, immersive personal-brand site. Skyradix takes its name from *radix*, Latin for root, so the whole site is set under a √ radical drawn in ultramarine light. It opens with √ THISULA LEWHAN and closes with √ LET'S TALK. The design rationale is in [docs/DESIGN.md](docs/DESIGN.md).
+A single-page personal site for an entrepreneur and the founder of Skyradix. Its foundation is Swiss typography: a 12-column grid, an oversized Inter Tight name and Swiss red as the only accent. Apple-style glass is used in three places: the floating nav, the Skyradix panel and the contact panel. The design rationale is in [docs/DESIGN.md](docs/DESIGN.md).
 
 Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4 and Motion for React. It has no backend, database or API routes, and every page is prerendered as static HTML.
 
@@ -27,8 +27,8 @@ Personal details and copy are kept out of the components:
 
 | File | Contains |
 | --- | --- |
-| `src/config/site.ts` | Name, roles, headline, contact emails, Skyradix links, social links, portrait |
-| `src/content/copy.ts` | Section copy: About, Perspective, Skyradix, Groundwork, Person (including the conversation starters) |
+| `src/config/site.ts` | Name, identity line, email, LinkedIn, Skyradix URL, portrait, `showNotes` switch |
+| `src/content/copy.ts` | All section copy, plus `notes.items`: add real notes there and they're listed automatically |
 
 Set any contact value in `site.ts` to an empty string and the links that depend on it disappear. No broken links are shown.
 

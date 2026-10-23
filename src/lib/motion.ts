@@ -5,7 +5,7 @@ import type { Transition } from "motion/react";
  * bounce only where a gesture carried momentum into the motion.
  */
 export const spring = {
-  /** Repositioning things: the rail marker, panels opening. */
+  /** Repositioning things: the nav pill, panels opening. */
   move: { type: "spring", bounce: 0, duration: 0.45 } satisfies Transition,
   /** Small, immediate responses: toggles, highlights. */
   snap: { type: "spring", bounce: 0, duration: 0.3 } satisfies Transition,

@@ -4,41 +4,46 @@
    Tokens
    ------------------------------------------------------------------ */
 :root {
-  --obsidian: #08090c;
-  --graphite: #121419;
-  --graphite-2: #1a1d24;
-  --hairline: #262932;
-  --bone: #ede7dc;
-  --bone-dim: #cfc8bc;
-  --ash: #9a968e;
-  --ultra: #3550ff;
-  --ultra-text: #7c8bff;
-  --field: #1f33cc;
-  --field-deep: #1828a8;
-  --field-muted: #c9cfff;
+  --paper: #f3f1ec;
+  --paper-2: #ebe8e1;
+  --ink: #16171a;
+  --ink-2: #5e5c57;
+  --rule: #d8d4cc;
+  --red: #d42a1e;
+  --red-ink: #c2241a;
+  --night: #16171a;
+  --night-2: #202126;
+  --night-text: #f3f1ec;
+  --night-muted: #a3a09a;
+  --night-rule: #34353b;
 
-  --gutter: clamp(1.25rem, 4.2vw, 4rem);
-  --stroke: clamp(6px, 0.62vw, 11px);
+  /* 12-column grid */
+  --margin: clamp(1.25rem, 4vw, 4.5rem);
+  --gap: clamp(1rem, 1.8vw, 1.75rem);
 
+  /* One easing family for everything */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 180ms;
+  --dur-2: 320ms;
+  --dur-3: 700ms;
 }
 
 @theme inline {
-  --color-obsidian: var(--obsidian);
-  --color-graphite: var(--graphite);
-  --color-graphite-2: var(--graphite-2);
-  --color-hairline: var(--hairline);
-  --color-bone: var(--bone);
-  --color-bone-dim: var(--bone-dim);
-  --color-ash: var(--ash);
-  --color-ultra: var(--ultra);
-  --color-ultra-text: var(--ultra-text);
-  --color-field: var(--field);
-  --color-field-deep: var(--field-deep);
-  --color-field-muted: var(--field-muted);
-  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-shoulders), "Arial Narrow", sans-serif;
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-rule: var(--rule);
+  --color-red: var(--red);
+  --color-red-ink: var(--red-ink);
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-night-text: var(--night-text);
+  --color-night-muted: var(--night-muted);
+  --color-night-rule: var(--night-rule);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), ui-sans-serif, sans-serif;
 }
 
 /* ------------------------------------------------------------------
@@ -47,8 +52,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  background: var(--obsidian);
-  color-scheme: dark;
+  background: var(--paper);
+  scroll-padding-top: 5.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -58,245 +63,339 @@ html {
 }
 
 body {
-  background: var(--obsidian);
-  color: var(--bone);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
   font-size: 1.0625rem;
-  line-height: 1.55;
+  line-height: 1.6;
+  font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overflow-x: clip;
-}
-
-/* Film grain over everything: a single static texture, no animation */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.075;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--ultra);
+  background: var(--red);
   color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--ultra-text);
-  outline-offset: 4px;
+  outline: 2px solid var(--red-ink);
+  outline-offset: 3px;
   border-radius: 2px;
 }
 
-.on-field :focus-visible {
-  outline-color: var(--bone);
-}
-
-section[id] {
-  scroll-margin-top: 4.5rem;
+.on-night :focus-visible {
+  outline-color: var(--night-text);
 }
 
 /* ------------------------------------------------------------------
-   Type
+   Grid
    ------------------------------------------------------------------ */
-.display {
+.frame {
+  padding-inline: var(--margin);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+@media (min-width: 768px) {
+  .grid-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.section {
+  padding-block: clamp(5.5rem, 11vw, 10rem);
+}
+
+/* ------------------------------------------------------------------
+   Type scale (Inter Tight for display, Inter for reading)
+   ------------------------------------------------------------------ */
+.t-display {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
-  font-weight: 850;
-  text-transform: uppercase;
-  line-height: 0.82;
-  letter-spacing: -0.012em;
-}
-
-.display-outline {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--ash);
-}
-
-.label {
-  font-family: var(--font-sans);
-  font-variation-settings: "wdth" 80;
   font-weight: 600;
-  font-size: 0.875rem;
-  letter-spacing: 0.01em;
-  color: var(--ash);
+  letter-spacing: -0.055em;
+  line-height: 0.86;
 }
 
-.lead {
-  font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.6rem);
+.t-h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 1.5rem + 3.6vw, 5.2rem);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.t-h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1.15rem + 1.3vw, 2.35rem);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.t-lead {
+  font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.7rem);
+  line-height: 1.38;
+  letter-spacing: -0.017em;
+  font-variation-settings: "opsz" 28;
+}
+
+.t-meta {
+  font-size: 0.8125rem;
   line-height: 1.4;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.005em;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.measure {
+  max-width: 60ch;
 }
 
 /* ------------------------------------------------------------------
-   Layout
+   Glass: used sparingly, as a material
    ------------------------------------------------------------------ */
-.wrap {
-  padding-inline: var(--gutter);
+.glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.52));
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 0 1px rgba(22, 23, 26, 0.07),
+    0 10px 30px -12px rgba(22, 23, 26, 0.22);
 }
 
-.chapter {
-  position: relative;
-  padding-block: clamp(6rem, 13vw, 11rem);
+.glass-dark {
+  background: linear-gradient(180deg, rgba(40, 41, 46, 0.74), rgba(22, 23, 26, 0.64));
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 30px 60px -30px rgba(0, 0, 0, 0.7);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--paper);
+    backdrop-filter: none;
+  }
+  .glass-dark {
+    background: var(--night-2);
+    backdrop-filter: none;
+  }
 }
 
 /* ------------------------------------------------------------------
-   Controls
+   Links and buttons
    ------------------------------------------------------------------ */
+
+/* Underline that draws from the left on hover */
+.u-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur-2) var(--ease-out);
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+
+.u-link-static {
+  background-size: 100% 1px;
+}
+
+@media (hover: hover) {
+  .u-link:hover {
+    background-size: 100% 1px;
+  }
+  .u-link-static:hover {
+    animation: underline-redraw 520ms var(--ease-out);
+  }
+}
+
+@keyframes underline-redraw {
+  0% {
+    background-size: 100% 1px;
+    background-position: 100% 100%;
+  }
+  45% {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+  46% {
+    background-position: 0 100%;
+  }
+  100% {
+    background-size: 100% 1px;
+    background-position: 0 100%;
+  }
+}
+
 .btn {
-  --btn-bg: var(--ultra);
-  --btn-fg: #fff;
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  min-height: 52px;
-  padding: 0.8rem 1.3rem;
-  background: var(--btn-bg);
-  color: var(--btn-fg);
-  font-weight: 600;
-  font-variation-settings: "wdth" 92;
-  letter-spacing: 0.005em;
+  gap: 0.75rem;
+  min-height: 50px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
   text-decoration: none;
   user-select: none;
   touch-action: manipulation;
   transition:
-    transform 160ms var(--ease-out),
-    background-color 220ms var(--ease-out),
-    color 220ms var(--ease-out),
-    box-shadow 220ms var(--ease-out);
+    background-color var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out);
 }
 
 .btn:active {
-  transform: scale(0.97);
-  transition-duration: 70ms;
+  transform: scale(0.975);
+  transition-duration: 80ms;
 }
 
-.btn-ghost {
-  --btn-bg: transparent;
-  --btn-fg: var(--bone);
-  box-shadow: inset 0 0 0 1px var(--hairline);
+.btn-red {
+  background: var(--red-ink);
+  color: #fff;
 }
 
-.btn-bone {
-  --btn-bg: var(--bone);
-  --btn-fg: var(--obsidian);
+.btn-ink {
+  background: var(--ink);
+  color: var(--paper);
 }
 
-@media (hover: hover) {
-  .btn:hover {
-    --btn-bg: #4a63ff;
-  }
-  .btn-ghost:hover {
-    --btn-bg: var(--graphite-2);
-    box-shadow: inset 0 0 0 1px var(--ash);
-  }
-  .btn-bone:hover {
-    --btn-bg: #fff;
-  }
-  .on-field .btn-ghost:hover {
-    --btn-bg: var(--field-deep);
-  }
+.btn-line {
+  box-shadow: inset 0 0 0 1px var(--rule);
 }
 
-.on-field .btn-ghost {
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bone) 40%, transparent);
-}
-
-.link {
-  color: inherit;
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.25em;
-  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
-  transition: text-decoration-color 200ms var(--ease-out);
+.btn .arrow {
+  transition: transform var(--dur-2) var(--ease-out);
 }
 
 @media (hover: hover) {
-  .link:hover {
-    text-decoration-color: currentColor;
+  .btn-red:hover {
+    background: #a81e15;
+  }
+  .btn-ink:hover {
+    background: #000;
+  }
+  .btn-line:hover {
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .btn:hover .arrow,
+  .group:hover .arrow {
+    transform: translateX(3px);
   }
 }
 
 /* ------------------------------------------------------------------
-   The radical: the site's signature mark
+   Motion
    ------------------------------------------------------------------ */
-/* The stroke has a non-scaling width, so it's revealed with a wipe (left to
-   right, the way the sign is written) rather than a dash offset. */
-.mark .radical-glyph {
-  clip-path: inset(-20% 100% -20% -20%);
-  transition: clip-path 700ms var(--ease-in-out);
-}
-.mark .radical-bar {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 700ms var(--ease-out) 380ms;
-}
-.mark[data-in] .radical-glyph {
-  clip-path: inset(-20% -20% -20% -20%);
-}
-.mark[data-in] .radical-bar {
-  transform: scaleX(1);
+
+/* Hero: the name rises out of its own line, then the details follow */
+.rise {
+  display: inline-block;
+  animation: rise 1000ms var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * 1ms);
 }
 
-/* Hero opening: only when the layout script adds .intro (first visit in a
-   session, motion allowed). Without it, everything is simply there. */
-.intro .hero-glyph {
-  clip-path: inset(-20% 100% -20% -20%);
-  animation: wipe 760ms var(--ease-in-out) 120ms forwards;
-}
-.intro .hero-bar {
-  transform: scaleX(0);
-  animation: grow 900ms var(--ease-out) 700ms forwards;
-}
-.intro .hero-letter {
-  transform: translateY(108%);
-  animation: rise 900ms var(--ease-out) calc(260ms + var(--i) * 45ms) forwards;
-}
-.intro .hero-fade {
-  opacity: 0;
-  animation: appear 600ms var(--ease-out) 900ms forwards;
+.fade {
+  animation: fade 800ms var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * 1ms);
 }
 
-@keyframes wipe {
-  to {
-    clip-path: inset(-20% -20% -20% -20%);
-  }
-}
-@keyframes grow {
-  to {
-    transform: scaleX(1);
-  }
-}
 @keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
   to {
     transform: translateY(0);
   }
 }
-@keyframes appear {
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
   to {
     opacity: 1;
+    transform: none;
+  }
+}
+
+/* Selected reveals: elements with data-reveal ease in once on entry */
+[data-reveal] {
+  transition:
+    opacity var(--dur-3) var(--ease-out),
+    transform var(--dur-3) var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+
+.js [data-reveal]:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+/* Scroll-linked depth, where the browser supports it (progressive) */
+@supports (animation-timeline: view()) {
+  .drift {
+    animation: drift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  @keyframes drift {
+    from {
+      transform: translateY(var(--drift-from, 6%));
+    }
+    to {
+      transform: translateY(var(--drift-to, -6%));
+    }
+  }
+
+  .grow-in {
+    animation: grow-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+  @keyframes grow-in {
+    from {
+      transform: scale(0.72);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mark .radical-glyph,
-  .mark .radical-bar {
-    transition: none;
-    clip-path: none;
+  .rise,
+  .fade {
+    animation: none;
+  }
+  .js [data-reveal]:not([data-shown]) {
+    opacity: 1;
     transform: none;
   }
-  .btn {
+  [data-reveal] {
     transition: none;
   }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .translucent {
-    backdrop-filter: none !important;
-    background: var(--obsidian) !important;
+  .drift,
+  .grow-in {
+    animation: none !important;
+  }
+  .btn,
+  .u-link {
+    transition: none;
   }
 }
 
@@ -307,8 +406,9 @@ section[id] {
   top: -100px;
   z-index: 100;
   padding: 0.75rem 1rem;
-  background: var(--bone);
-  color: var(--obsidian);
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 6px;
   font-weight: 600;
 }
 

@@ -1,190 +1,63 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
 import { site } from "@/config/site";
-import { RADICAL_PATH } from "./radical";
-
-const LINES = [site.firstName.toUpperCase(), site.lastName.toUpperCase()];
+import { hero } from "@/content/copy";
+import { Arrow } from "./icons";
 
 /**
- * The opening screen. The name sits under a radical drawn in light, and the
- * visitor's pointer (or finger) is a lamp: it washes the dark stage and
- * catches the lettering where it passes.
+ * A Swiss poster: the details set small across the top of the grid, the name
+ * set very large along the bottom, its second line offset to column four.
  */
 export function Hero() {
-  const reduce = useReducedMotion();
-  const stageRef = useRef<HTMLElement>(null);
-  const nameRef = useRef<HTMLDivElement>(null);
-
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const x = useSpring(rawX, { bounce: 0, duration: 0.9 });
-  const y = useSpring(rawY, { bounce: 0, duration: 0.9 });
-
-  // Resting position: just above the root of the radical.
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const place = () => {
-      const r = stage.getBoundingClientRect();
-      rawX.jump(r.width * 0.3);
-      rawY.jump(r.height * 0.42);
-      x.jump(r.width * 0.3);
-      y.jump(r.height * 0.42);
-    };
-    place();
-    window.addEventListener("resize", place);
-    return () => window.removeEventListener("resize", place);
-  }, [rawX, rawY, x, y]);
-
-  // Keep the lit copy of the name in step with the lamp.
-  useEffect(() => {
-    const update = () => {
-      const stage = stageRef.current;
-      const name = nameRef.current;
-      if (!stage || !name) return;
-      const s = stage.getBoundingClientRect();
-      const n = name.getBoundingClientRect();
-      name.style.setProperty("--mx", `${x.get() - (n.left - s.left)}px`);
-      name.style.setProperty("--my", `${y.get() - (n.top - s.top)}px`);
-    };
-    update();
-    const a = x.on("change", update);
-    const b = y.on("change", update);
-    return () => {
-      a();
-      b();
-    };
-  }, [x, y]);
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    rawX.set(e.clientX - r.left);
-    rawY.set(e.clientY - r.top);
-  };
-
   return (
-    <header
-      id="top"
-      ref={stageRef}
-      onPointerMove={onPointerMove}
-      onPointerDown={onPointerMove}
-      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden"
-    >
-      {/* Lamp */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute top-0 left-0 -z-10 size-[110vmax] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          x,
-          y,
-          background:
-            "radial-gradient(circle, rgba(53,80,255,0.26) 0%, rgba(53,80,255,0.1) 22%, rgba(53,80,255,0.03) 40%, transparent 58%)",
-        }}
-      />
-      {/* Vignette keeps the edges of the stage in shadow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{ background: "radial-gradient(120% 90% at 40% 45%, transparent 40%, rgba(0,0,0,0.65) 100%)" }}
-      />
-
-      <div className="wrap flex flex-1 flex-col pt-[clamp(6rem,14vh,9rem)] pb-[clamp(1.75rem,4vh,3rem)]">
-        <h1 className="relative flex flex-1 items-center">
-          <span className="sr-only">{site.name}</span>
-          <span aria-hidden className="relative flex text-[length:min(23vw,30vh)] sm:text-[length:min(20vw,35vh)]">
-            {/* The radical: lead-in, drop to the root, long rise */}
-            <span className="relative w-[0.5em] flex-none">
-              <svg viewBox="0 0 72 100" preserveAspectRatio="none" className="hero-glyph absolute inset-x-0 top-0 h-[calc(100%+0.16em)] w-full overflow-visible">
-                <path
-                  d={RADICAL_PATH}
-                  fill="none"
-                  strokeLinejoin="miter"
-                  vectorEffect="non-scaling-stroke"
-                  style={{ stroke: "var(--ultra)", strokeWidth: "var(--stroke)" }}
-                />
-              </svg>
-              <span className="hero-fade label absolute top-full left-[118%] mt-1 hidden text-[0.95rem] whitespace-nowrap sm:block">
-                <span className="text-ultra-text">radix</span>, Latin: root
-              </span>
-            </span>
-
-            <span className="relative block pt-[0.13em]">
-              {/* Vinculum: runs over the name and off the edge of the screen */}
-              <span
-                className="hero-bar absolute top-0 left-0 h-[var(--stroke)] origin-left -translate-y-1/2 bg-ultra"
-                style={{ right: "calc(-100vw)" }}
-              />
-              <span ref={nameRef} className="relative block">
-                <NameLines className="text-[#aaa397]" />
-                {/* The lit copy: same letters, revealed only around the lamp */}
-                <NameLines
-                  className="absolute inset-0 text-white"
-                  style={{
-                    maskImage: "radial-gradient(circle at var(--mx, -999px) var(--my, -999px), #000 0, rgba(0,0,0,0.55) 1.2em, transparent 2.6em)",
-                    WebkitMaskImage:
-                      "radial-gradient(circle at var(--mx, -999px) var(--my, -999px), #000 0, rgba(0,0,0,0.55) 1.2em, transparent 2.6em)",
-                  }}
-                />
-              </span>
+    <section id="top" aria-labelledby="hero-name" className="frame relative flex flex-col pt-24 pb-6 sm:min-h-[100svh] sm:pt-[max(6rem,min(8rem,14vh))]">
+      <div className="grid-12 order-2 mt-10 gap-y-8 sm:order-none sm:mt-0">
+        <p className="fade col-span-4 md:col-span-5" style={{ "--d": 450 } as React.CSSProperties}>
+          <span className="t-h3 flex items-start gap-3">
+            <span aria-hidden className="mt-[0.36em] size-[0.42em] flex-none bg-red" />
+            <span>
+              Entrepreneur.
+              <br />
+              Founder of Skyradix.
             </span>
           </span>
-        </h1>
-
-        <div className="mt-10 grid gap-8 border-t border-hairline pt-6 md:grid-cols-12 md:gap-6">
-          <ul className="grid gap-1 md:col-span-4" aria-label="Roles">
-            {site.roles.map((role, i) => (
-              <li key={role} className="flex items-baseline gap-3 text-[1.02rem] font-medium">
-                <span aria-hidden className="h-[2px] w-3 translate-y-[-0.3em] bg-ultra" />
-                {i === 0 ? (
-                  <a href="#skyradix" className="link decoration-ultra-text">
-                    {role}
-                  </a>
-                ) : (
-                  role
-                )}
-              </li>
-            ))}
-          </ul>
-          <p className="lead max-w-[30ch] md:col-span-5">{site.headline}</p>
-          <div className="flex flex-wrap items-start gap-3 md:col-span-3 md:justify-end">
-            <a href="#about" className="btn">
-              Get to know me
-              <ArrowDown />
+        </p>
+        <div className="fade col-span-4 md:col-span-5 md:col-start-8" style={{ "--d": 600 } as React.CSSProperties}>
+          <p className="text-[1.12rem] leading-[1.55] text-ink-2 [font-variation-settings:'opsz'_20]">{hero.intro}</p>
+          <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a href="#contact" className="btn btn-red">
+              {hero.primary}
+              <Arrow className="arrow" />
             </a>
-            <a href="#skyradix" className="btn btn-ghost">
-              Discover Skyradix
+            <a href="#skyradix" className="group inline-flex min-h-11 items-center gap-2 font-medium">
+              <span className="u-link u-link-static">{hero.secondary}</span>
+              <Arrow className="arrow" />
             </a>
           </div>
         </div>
       </div>
-    </header>
-  );
-}
 
-function NameLines({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
-  let i = 0;
-  return (
-    <span className={`display block ${className}`} style={style}>
-      {LINES.map((line) => (
-        <span key={line} className="block overflow-hidden pb-[0.02em]">
-          {line.split("").map((ch, k) => (
-            <span key={k} className="hero-letter inline-block" style={{ "--i": i++ } as React.CSSProperties}>
-              {ch}
-            </span>
-          ))}
+      <h1 id="hero-name" className="t-display drift order-1 pt-4 text-[clamp(4.4rem,23vw,8rem)] sm:order-none sm:mt-auto sm:pt-[min(4rem,5vh)] sm:text-[length:min(24vw,29vh)] md:text-[length:min(19vw,29vh)]" style={{ "--drift-from": "0%", "--drift-to": "-14%" } as React.CSSProperties}>
+        <span className="block overflow-hidden pb-[0.06em]">
+          <span className="rise" style={{ "--d": 0 } as React.CSSProperties}>
+            {site.firstName}
+          </span>
         </span>
-      ))}
-    </span>
-  );
-}
+        <span className="block overflow-hidden pb-[0.08em] pl-[9%] md:pl-[calc((100%+var(--gap))/12*3)]">
+          <span className="rise" style={{ "--d": 120 } as React.CSSProperties}>
+            {site.lastName}
+            <span className="text-red">.</span>
+          </span>
+        </span>
+      </h1>
 
-function ArrowDown() {
-  return (
-    <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M7 1.5v10.5M2.5 7.5 7 12l4.5-4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+      <div className="fade grid-12 order-3 mt-12 border-t border-rule pt-4 sm:order-none sm:mt-0" style={{ "--d": 800 } as React.CSSProperties}>
+        <p className="t-meta col-span-2 text-ink-2 md:col-span-3">{site.location}</p>
+        <p className="t-meta col-span-2 text-right md:col-span-3 md:col-start-10">
+          <a href="#about" className="group inline-flex items-center gap-1.5 text-ink-2 hover:text-ink">
+            <span className="u-link">Read on</span>
+            <Arrow className="arrow rotate-90" size={12} />
+          </a>
+        </p>
+      </div>
+    </section>
   );
 }

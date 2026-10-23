@@ -1,70 +1,33 @@
-# Design: "Radix"
+# Design: Swiss foundation, glass details
 
-## Why the first version failed
+## Principles
+- **Swiss grid first.** Everything sits on a 12-column grid (4 on phones):
+  - Each section's index and label take columns 1–3; headings and text start at column 4.
+  - The hero is a poster. Details sit small across the top, and the name is set very large along the bottom, with "Lewhan." offset to column 4.
+- **Glass is a material, used in three places:**
+  - the floating nav, which switches to dark glass over the Skyradix field
+  - the frosted panel over the giant "Skyradix" word
+  - the contact panel over a red Swiss circle
 
-- **Foundation:** an off-white page with polite type. It read as a light portfolio template, whatever the details.
-- **Hero:** the stock "text on the left, illustration on the right" composition. The transit map was a good infographic, but it was not an identity.
-- **Colour:** four primary line colours read as a corporate chart, not a personal brand.
-- **Content:** projects and research made up most of the page, so the person was a footnote to the work.
-- **Motion:** a single line-draw. Everything else was static stacked sections.
+  Body text never sits on busy glass without an opaque enough tint.
+- **Red is punctuation, not a fill.** It appears as the full stop after the name, small square markers, section indices, the primary button and the contact circle.
 
-## Concepts considered
-
-1. **Departure board.** The name is set on split-flap characters, and the roles flip into place.
-   - Rejected: it's an existing cliché, and it only works as a gimmick.
-2. **Night editorial.** A high-contrast serif on black, laid out like a magazine cover.
-   - Rejected: it reads as fashion and luxury templating, and says nothing about business or technology.
-3. **Radix (chosen).** The Skyradix name says it: *radix* is Latin for root, and the √ sign is called a radical.
-   - The site is written as an expression under a root. A stroke of ultramarine light, the radical, carries the name.
-   - The same mark recurs as each section's signature, and it closes the page as √ LET'S TALK.
-   - It is personal (it comes from the business he founded), mathematical (technology) and graphic (brand), and it suggests growth: a short drop to the root, then a long rise.
-
-## Art direction
-
-- **Stage:** obsidian with film grain and a vignette. In the opening screen, the visitor's pointer is a light source that sweeps the dark and catches the lettering of the name.
-- **One colour of light:** ultramarine. It is used for the radical, progress and focus, and as one full-bleed field for Skyradix (the "sky").
-
-| Name | Hex | Role |
+## Tokens
+| Name | Hex | Use |
 | --- | --- | --- |
-| Obsidian | `#08090C` | Stage |
-| Graphite | `#121419` | Raised surfaces, hover states |
-| Bone | `#EDE7DC` | Primary text (16:1); warm, so it reads as human, not clinical |
-| Ash | `#9A968E` | Secondary text (6.8:1) |
-| Ultramarine | `#3550FF` | The radical, progress, focus |
-| Sky field | `#1F33CC` | The Skyradix section (bone on it, 7.1:1) |
+| Paper | `#F3F1EC` | Page |
+| Ink | `#16171A` | Text (15.9:1), Skyradix field |
+| Ink 2 | `#5E5C57` | Secondary text (5.9:1) |
+| Rule | `#D8D4CC` | Hairlines |
+| Red | `#D42A1E` / `#C2241A` | Accent / text and buttons (5.0:1; white on it, 5.6:1) |
 
-## Type
+- **Type:** Inter Tight 600 for display, with −0.045 to −0.055em tracking and 0.86 leading. Inter (optical size) for reading text.
+- **Motion:** one easing, `cubic-bezier(.22,1,.36,1)`.
+  - The hero name rises out of its line, and the details follow.
+  - Selected blocks reveal once on entry.
+  - The giant words drift slightly with scroll, and the contact circle grows in as the section arrives. Both use CSS scroll timelines, as progressive enhancement.
+  - The nav pill moves on a critically damped spring.
+  - With reduced motion, all of this is off and nothing is hidden.
 
-- **Big Shoulders** (optical size 72, weight 800–900, capitals): the name and display statements. Condensed and industrial, so it can fill a screen without shouting.
-- **Instrument Sans** (width 75–100): body text and labels, always in sentence case.
-
-## Composition
-
-```text
-┌─────────────────────────────────────────────────────────────┐
-│ √ Thisula Lewhan          About  Perspective  Skyradix  ... │
-│ ━━━━━━━━━ (scroll progress: the vinculum) ━━━━━━━━━━━━━━━━━ │
-│        ╲━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│
-│  ╲    ╱  THISULA                                            │
-│   ╲  ╱   LEWHAN            (pointer light)                  │
-│    ╲╱  radix: root                                          │
-│  Founder of Skyradix     Ideas are easy. I'm...   [Meet me] │
-└─────────────────────────────────────────────────────────────┘
- About        large manifesto, lit word by word as you read
- Perspective  four huge outlined words; choose one to light it
- Skyradix     full-bleed ultramarine "sky"; the name splits into Sky | Radix
- Groundwork   MAS Holdings, IEEE, SLIIT, SLIM, as large rows
- Person       duotone portrait that turns to colour at a touch
- Contact      √ LET'S TALK, with four clear routes
-```
-
-## Motion
-
-- **Opening:** one moment. The radical draws, the vinculum extends, and the letters rise into place. It lasts about 1.2 s, happens once per session, and never blocks content.
-- **Springs:** critically damped by default (`bounce: 0`). They are used for the nav indicator, the perspective selector, the Skyradix split and the menu.
-- **Scroll:** the vinculum at the top of the page is the progress bar, and the manifesto lights word by word. Neither hijacks scrolling.
-- **Reduced motion:** no draw, no letter rise, no moving light, and the manifesto is fully lit. State changes cross-fade.
-
-## Weakest decisions, revisited after review
-
-See the final handoff notes.
+## Content rule
+This is a personal site for an entrepreneur. There are no projects, research, skills lists or invented business facts.
