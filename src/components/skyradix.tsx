@@ -10,7 +10,7 @@ import { ArrowUpRight } from "./icons";
 export function Skyradix() {
   const url = site.links.skyradix;
   return (
-    <section id="skyradix" aria-labelledby="skyradix-title" className="on-night section relative overflow-hidden bg-night text-night-text">
+    <section id="skyradix" data-surface="dark" aria-labelledby="skyradix-title" className="on-night section relative overflow-hidden bg-night text-night-text">
       <div className="frame">
         <div className="grid-12">
           <p data-reveal className="t-meta col-span-4 flex gap-3 text-night-muted md:col-span-3">

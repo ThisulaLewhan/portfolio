@@ -11,11 +11,12 @@
   --rule: #d8d4cc;
   --red: #d42a1e;
   --red-ink: #c2241a;
-  --night: #16171a;
-  --night-2: #202126;
+  /* Neutral, not blue: matches the blacks in the hero photograph */
+  --night: #0a0a0a;
+  --night-2: #1a1a1a;
   --night-text: #f3f1ec;
   --night-muted: #a3a09a;
-  --night-rule: #34353b;
+  --night-rule: #2e2e2e;
 
   /* 12-column grid */
   --margin: clamp(1.25rem, 4vw, 4.5rem);
@@ -182,7 +183,7 @@ body {
 }
 
 .glass-dark {
-  background-color: rgba(30, 31, 36, 0.7);
+  background-color: rgba(26, 26, 26, 0.7);
   -webkit-backdrop-filter: blur(28px) saturate(150%);
   backdrop-filter: blur(28px) saturate(150%);
   box-shadow:
@@ -381,6 +382,132 @@ body {
 }
 
 /* ------------------------------------------------------------------
+   Hero poster
+   Everything is derived from a few measured proportions, so the head always
+   sits centred in the gap between "Thisula" and "Lewhan.":
+     "Thisula" is 2.8826 × the font size wide, "Lewhan." 3.4549 ×
+     the cut-out is 0.9855 as wide as it is tall
+     the head is 31% of the image width, centred 44.2% across
+   The hero is a size container, so 100cqw is its exact width (no scrollbar).
+   ------------------------------------------------------------------ */
+.hero {
+  container-type: inline-size;
+}
+
+.hero > * {
+  /* phones: name stacked, portrait centred under it */
+  --F: 22cqw;
+  --PH: max(36rem, 178cqw);
+  --IH: 112cqw;
+  --IW: calc(var(--IH) * 0.9855);
+  --fig-left: calc(50cqw - var(--IW) * 0.442);
+}
+
+.hero-poster {
+  height: var(--PH);
+}
+
+/* Pure white, lit by the same light as the figure: a soft bloom applied to
+   the whole line (outside the rise masks, so the glow is never clipped) */
+.hero-name {
+  top: 5.5rem;
+  font-size: var(--F);
+  line-height: 0.86;
+  color: #f7f7f5;
+  filter: drop-shadow(0 0 calc(var(--F) * 0.09) rgba(255, 255, 255, 0.22))
+    drop-shadow(0 0 calc(var(--F) * 0.025) rgba(255, 255, 255, 0.35));
+}
+
+.hero-figure {
+  height: var(--IH);
+  left: var(--fig-left);
+}
+
+/* The figure has no edge: lit from above at the head, it dissolves into the
+   dark toward the shoulders and the bottom, like a single studio light. */
+.hero-figure img {
+  -webkit-mask-image: radial-gradient(ellipse 54% 76% at 44.2% 30%, #000 40%, rgba(0, 0, 0, 0.62) 58%, rgba(0, 0, 0, 0.18) 76%, transparent 93%);
+  mask-image: radial-gradient(ellipse 54% 76% at 44.2% 30%, #000 40%, rgba(0, 0, 0, 0.62) 58%, rgba(0, 0, 0, 0.18) 76%, transparent 93%);
+}
+
+/* The suit fades into the dark instead of stopping at an edge */
+.hero-poster::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 30%;
+  z-index: 11;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--night));
+}
+
+/* One overhead light behind the head, falling off to black; corners vignetted */
+.hero-spot {
+  background:
+    radial-gradient(ellipse 34% 52% at var(--gap-x, 50%) 30%, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04) 45%, transparent 75%),
+    radial-gradient(ellipse 90% 85% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+}
+
+/* Tablets: still stacked, scaled for the wider screen */
+@media (min-width: 640px) {
+  .hero > * {
+    --F: 18cqw;
+    --PH: 140cqw;
+    --IH: 92cqw;
+  }
+}
+
+/* From 1024px the name runs in one line with the head in its gap */
+@media (min-width: 1024px) {
+  .hero > * {
+    --PH: max(34rem, min(100svh, 112cqw));
+    --IH: calc(var(--PH) * 0.86);
+    --W: calc(100cqw - 2 * var(--margin));
+    /* gap = 40% of the portrait's width: the head plus air on both sides */
+    --G: calc(var(--IW) * 0.4);
+    --F: min(12.4cqw, calc((var(--W) - var(--G)) / 6.3375));
+    /* centre of the gap = left margin + "Thisula" + half the remaining space */
+    --gap-x: calc(var(--margin) + var(--F) * 2.8826 + (var(--W) - var(--F) * 6.3375) / 2);
+    --fig-left: calc(var(--gap-x) - var(--IW) * 0.442);
+  }
+  .hero-name {
+    display: flex;
+    justify-content: space-between;
+    top: calc(41% - var(--F) * 0.45);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero > * {
+    --PH: max(44rem, 100svh);
+    --IH: calc(var(--PH) * 0.84);
+  }
+  .hero-name {
+    top: calc(44% - var(--F) * 0.45);
+  }
+  .hero-under {
+    top: calc(44% + var(--F) * 0.5 + 1.25rem);
+  }
+  /* Comes after .t-h3, so it wins: a quieter size beside the poster name */
+  .hero-id {
+    font-size: 1.5rem;
+  }
+}
+
+/* Portrait settles up into place as the name rises */
+.hero-figure img {
+  animation: portrait-in var(--dur-4) var(--ease-out) both;
+  animation-delay: 150ms;
+}
+
+@keyframes portrait-in {
+  from {
+    opacity: 0;
+    transform: translateY(3%);
+  }
+}
+
+/* ------------------------------------------------------------------
    Motion
    ------------------------------------------------------------------ */
 
@@ -412,31 +539,6 @@ body {
 @keyframes line-in {
   from {
     transform: scaleX(0);
-  }
-}
-
-/* Hero portrait: uncovered from the bottom edge as the name rises */
-.hero-mask {
-  animation: hero-mask var(--dur-4) var(--ease-in-out) both;
-  animation-delay: calc(var(--d, 0) * 1ms);
-}
-.hero-mask-image {
-  animation: hero-settle var(--dur-4) var(--ease-out) both;
-  animation-delay: calc(var(--d, 0) * 1ms);
-}
-
-@keyframes hero-mask {
-  from {
-    clip-path: inset(100% 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@keyframes hero-settle {
-  from {
-    scale: 1.06;
   }
 }
 
@@ -586,8 +688,7 @@ body {
   .fade,
   .enter-fade,
   .line-in,
-  .hero-mask,
-  .hero-mask-image {
+  .hero-figure img {
     animation: none;
   }
   .js [data-reveal]:not([data-shown]),

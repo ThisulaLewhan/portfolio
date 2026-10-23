@@ -28,8 +28,11 @@ export const site = {
     "Thisula Lewhan is an entrepreneur and the founder of Skyradix, building his own path through business and technology from Colombo, Sri Lanka.",
 
   portrait: {
-    src: "/images/thisula-lewhan.jpg",
-    alt: "Portrait of Thisula Lewhan",
+    /** Cut-out on a transparent background, trimmed to the subject. */
+    src: "/images/hero-thisula.webp",
+    width: 1971,
+    height: 2000,
+    alt: "Thisula Lewhan in a dark suit and tie",
   },
 
   links: {

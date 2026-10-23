@@ -14,7 +14,8 @@ type NavId = (typeof nav)[number]["id"];
  */
 function useActiveSection(): { active: NavId | null; overDark: boolean; atTop: boolean } {
   const [active, setActive] = useState<NavId | null>(null);
-  const [overDark, setOverDark] = useState(false);
+  // The page opens on the dark hero, so start on dark glass.
+  const [overDark, setOverDark] = useState(true);
   const [atTop, setAtTop] = useState(true);
   useEffect(() => {
     let frame = 0;
@@ -27,8 +28,13 @@ function useActiveSection(): { active: NavId | null; overDark: boolean; atTop: b
         if (el && el.getBoundingClientRect().top <= line) current = item.id;
       }
       setActive(current);
-      const dark = document.getElementById("skyradix")?.getBoundingClientRect();
-      setOverDark(!!dark && dark.top <= 44 && dark.bottom >= 44);
+      // Any section marked data-surface="dark" under the nav's midline
+      setOverDark(
+        [...document.querySelectorAll<HTMLElement>('[data-surface="dark"]')].some((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top <= 44 && r.bottom >= 44;
+        }),
+      );
       setAtTop(window.scrollY < 8);
     };
     const schedule = () => {

@@ -42,7 +42,7 @@
     - Buttons press down to 0.975 scale.
     - The copy-email control confirms in place.
   - **Nav:** rests lighter at the top of the page, firms up on scroll, turns to dark glass over Skyradix, and its pill moves on a critically damped spring.
-  - **Hero portrait:** fills the last five columns at full hero height, beside a seven-column text block (identity, name, intro). Below 1024px it stacks under the name. It is uncovered from the bottom edge on load.
+  - **Hero poster:** dark, with the name across the full width ("Thisula" on the left edge, "Lewhan." on the right) and a cut-out portrait in front, so the head fills the gap. On 1280px+ the details sit in the four corners; below that they move to a band underneath, and on phones the name stacks. The portrait settles up into place on load.
   - **Scroll-linked depth:** desktop only, via CSS scroll timelines. The giant words drift.
   - **Fallbacks:** with reduced motion, all of this is off and nothing is hidden. Without JavaScript, nothing is hidden either.
 
