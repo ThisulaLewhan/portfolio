@@ -5,7 +5,7 @@ import { Arrow, ArrowUpRight } from "./icons";
 import { SectionHead } from "./section-head";
 
 /**
- * The ending. A red Swiss circle grows into place as the section arrives,
+ * The ending. A red Swiss circle scales into place as the section arrives,
  * and a frosted panel sits over it, so the invitation reads as the last,
  * warmest thing on the page.
  */
@@ -25,11 +25,12 @@ export function Contact() {
         {/* The circle sits on the grid's right edge; the panel overlaps it */}
         <div
           aria-hidden
-          className="grow-in pointer-events-none absolute top-[-6%] right-[-22vw] aspect-square w-[78vw] rounded-full bg-red md:top-[-14%] md:right-[-4vw] md:w-[min(46vw,40rem)]"
+          data-reveal="circle"
+          className="pointer-events-none absolute top-[-6%] right-[-22vw] aspect-square w-[78vw] rounded-full bg-red md:top-[-14%] md:right-[-4vw] md:w-[min(46vw,40rem)]"
         />
 
         <div className="grid-12 relative">
-          <div data-reveal className="glass col-span-4 rounded-[18px] p-7 sm:p-10 md:col-span-9 md:col-start-4 lg:col-span-7 lg:col-start-4">
+          <div data-reveal style={{ "--d": 160 } as React.CSSProperties} className="glass col-span-4 rounded-[18px] p-7 sm:p-10 md:col-span-9 md:col-start-4 lg:col-span-7 lg:col-start-4">
             <div className="grid gap-2 text-[1.12rem] text-ink-2">
               {contact.lines.map((l) => (
                 <p key={l} className="measure">
@@ -39,7 +40,7 @@ export function Contact() {
             </div>
 
             {email && (
-              <div className="mt-10">
+              <div data-reveal className="mt-10" style={{ "--d": 300 } as React.CSSProperties}>
                 <a
                   href={mailto(email, "Hello Thisula")}
                   className="t-h3 u-link u-link-static inline-block max-w-full break-all"
@@ -56,7 +57,7 @@ export function Contact() {
               </div>
             )}
 
-            <ul className="mt-10 border-t border-ink/10">
+            <ul data-reveal className="mt-10 border-t border-ink/10" style={{ "--d": 400 } as React.CSSProperties}>
               {routes.map((r) => (
                 <li key={r.label} className="border-b border-ink/10">
                   <a
@@ -68,7 +69,7 @@ export function Contact() {
                     <span className="truncate font-medium">
                       <span className="u-link">{r.value}</span>
                     </span>
-                    {r.external ? <ArrowUpRight className="arrow" /> : <Arrow className="arrow" />}
+                    {r.external ? <ArrowUpRight className="arrow-ne" /> : <Arrow className="arrow" />}
                     {r.external && <span className="sr-only">(opens in a new tab)</span>}
                   </a>
                 </li>

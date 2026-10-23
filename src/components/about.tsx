@@ -23,17 +23,22 @@ export function About() {
         </div>
 
         {site.portrait.src && (
-          <figure data-reveal className="col-span-3 m-0 md:col-span-3 md:col-start-10" style={{ "--d": 200 } as React.CSSProperties}>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[4px] bg-paper-2">
-              <Image
-                src={site.portrait.src}
-                alt={site.portrait.alt}
-                fill
-                sizes="(min-width: 768px) 24vw, 75vw"
-                className="object-cover object-[50%_30%] saturate-[0.85]"
-              />
+          <figure data-reveal="mask" className="col-span-3 m-0 md:col-span-3 md:col-start-10" style={{ "--d": 150 } as React.CSSProperties}>
+            {/* Uncovered from the bottom edge as it arrives; a few percent of parallax on desktop */}
+            <div className="mask-frame relative aspect-[4/5] overflow-hidden rounded-[4px] bg-paper-2">
+              <div className="parallax absolute inset-x-0 -inset-y-[4%]">
+                <div className="mask-image absolute inset-0">
+                  <Image
+                    src={site.portrait.src}
+                    alt={site.portrait.alt}
+                    fill
+                    sizes="(min-width: 768px) 24vw, 75vw"
+                    className="object-cover object-[50%_30%] saturate-[0.85]"
+                  />
+                </div>
+              </div>
             </div>
-            <figcaption className="t-meta mt-3 flex justify-between text-ink-2">
+            <figcaption data-reveal className="t-meta mt-3 flex justify-between text-ink-2" style={{ "--d": 450 } as React.CSSProperties}>
               <span>{site.firstName}</span>
               <span>{site.location}</span>
             </figcaption>

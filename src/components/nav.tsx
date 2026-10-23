@@ -12,9 +12,10 @@ type NavId = (typeof nav)[number]["id"];
  * The section whose top has passed the reading line, and whether the nav is
  * currently floating over the dark Skyradix field.
  */
-function useActiveSection(): { active: NavId | null; overDark: boolean } {
+function useActiveSection(): { active: NavId | null; overDark: boolean; atTop: boolean } {
   const [active, setActive] = useState<NavId | null>(null);
   const [overDark, setOverDark] = useState(false);
+  const [atTop, setAtTop] = useState(true);
   useEffect(() => {
     let frame = 0;
     const measure = () => {
@@ -28,6 +29,7 @@ function useActiveSection(): { active: NavId | null; overDark: boolean } {
       setActive(current);
       const dark = document.getElementById("skyradix")?.getBoundingClientRect();
       setOverDark(!!dark && dark.top <= 44 && dark.bottom >= 44);
+      setAtTop(window.scrollY < 8);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(measure);
@@ -41,7 +43,7 @@ function useActiveSection(): { active: NavId | null; overDark: boolean } {
       window.removeEventListener("resize", schedule);
     };
   }, []);
-  return { active, overDark };
+  return { active, overDark, atTop };
 }
 
 /**
@@ -50,8 +52,9 @@ function useActiveSection(): { active: NavId | null; overDark: boolean } {
  * section. On phones the right capsule becomes a menu.
  */
 export function Nav() {
-  const { active, overDark } = useActiveSection();
-  const surface = overDark ? "glass-dark text-night-text" : "glass";
+  const { active, overDark, atTop } = useActiveSection();
+  // Lighter at rest at the very top; full glass once content moves beneath.
+  const surface = overDark ? "glass-dark text-night-text" : atTop ? "glass glass-rest" : "glass";
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -78,7 +81,7 @@ export function Nav() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className="enter-fade fixed inset-x-0 top-0 z-50">
       <nav aria-label="Main" className="frame flex items-start justify-between pt-4 sm:pt-5">
         <a
           href="#top"
@@ -103,8 +106,14 @@ export function Nav() {
                 <a
                   href={`#${item.id}`}
                   aria-current={on ? "location" : undefined}
-                  className={`relative flex h-9 items-center rounded-full px-4 text-[0.92rem] font-medium transition-colors duration-200 ${
-                    on ? (overDark ? "text-night-text" : "text-ink") : overDark ? "text-night-muted hover:text-night-text" : "text-ink-2 hover:text-ink"
+                  className={`relative flex h-9 items-center rounded-full px-4 text-[0.92rem] font-medium transition-[color,background-color] duration-200 ${
+                    on
+                      ? overDark
+                        ? "text-night-text"
+                        : "text-ink"
+                      : overDark
+                        ? "text-night-muted hover:bg-white/8 hover:text-night-text"
+                        : "text-ink-2 hover:bg-white/55 hover:text-ink"
                   }`}
                 >
                   {item.label}
@@ -142,8 +151,13 @@ export function Nav() {
                 className="glass absolute top-[calc(100%+0.5rem)] right-0 w-[min(16rem,calc(100vw-2.5rem))] rounded-2xl p-2"
               >
                 <ul>
-                  {nav.map((item) => (
-                    <li key={item.id}>
+                  {nav.map((item, i) => (
+                    <motion.li
+                      key={item.id}
+                      initial={reduce ? false : { opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={reduce ? { duration: 0 } : { ...spring.snap, delay: 0.03 + i * 0.035 }}
+                    >
                       <a
                         href={`#${item.id}`}
                         onClick={() => setOpen(false)}
@@ -153,7 +167,7 @@ export function Nav() {
                         {item.label}
                         {active === item.id && <span aria-hidden className="size-1.5 rounded-full bg-red" />}
                       </a>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </motion.div>

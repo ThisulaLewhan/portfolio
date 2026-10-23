@@ -18,8 +18,9 @@ export function Background() {
             key={item.place}
             data-reveal
             style={{ "--d": 100 * i } as React.CSSProperties}
-            className={`col-span-4 border-t-2 border-ink pt-5 md:col-span-3 ${i === 0 ? "md:col-start-4" : ""}`}
+            className={`relative col-span-4 border-t-2 border-transparent pt-5 md:col-span-3 ${i === 0 ? "md:col-start-4" : ""}`}
           >
+            <span aria-hidden className="rule-draw -top-[2px] h-[2px] bg-ink" />
             <p className="text-[1.15rem] leading-snug font-semibold tracking-[-0.02em] [font-family:var(--font-display)]">
               {item.place}
             </p>

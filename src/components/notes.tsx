@@ -29,7 +29,7 @@ export function Notes() {
                 </span>
                 <span className="t-meta flex flex-none items-center gap-2 text-ink-2">
                   {n.date}
-                  <ArrowUpRight className="arrow" />
+                  <ArrowUpRight className="arrow-ne" />
                 </span>
               </a>
             </li>

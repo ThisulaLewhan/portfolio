@@ -11,13 +11,16 @@ export function Values() {
           <li
             key={v.title}
             data-reveal
-            style={{ "--d": 90 * i } as React.CSSProperties}
-            className="group grid-12 gap-y-3 border-t border-rule py-8 last:border-b md:py-10"
+            style={{ "--d": 110 * i } as React.CSSProperties}
+            className="group relative grid-12 gap-y-3 border-t border-transparent py-8 last:border-b md:py-10"
           >
+            {/* Each row's rule draws in with it; the last row also closes the list */}
+            <span aria-hidden className="rule-draw -top-px h-px bg-rule" />
+            {i === values.items.length - 1 && <span aria-hidden className="rule-draw -bottom-px h-px bg-rule" />}
             <span className="t-meta col-span-4 flex items-center gap-3 pt-[0.55em] text-ink-2 md:col-span-3">
               <span
                 aria-hidden
-                className="size-2 bg-rule transition-colors duration-300 group-hover:bg-red"
+                className="size-2 bg-rule transition-[background-color,transform] duration-300 group-hover:scale-125 group-hover:bg-red"
               />
               {String(i + 1).padStart(2, "0")}
             </span>

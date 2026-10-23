@@ -22,12 +22,28 @@
 | Red | `#D42A1E` / `#C2241A` | Accent / text and buttons (5.0:1; white on it, 5.6:1) |
 
 - **Type:** Inter Tight 600 for display, with −0.045 to −0.055em tracking and 0.86 leading. Inter (optical size) for reading text.
-- **Motion:** one easing, `cubic-bezier(.22,1,.36,1)`.
-  - The hero name rises out of its line, and the details follow.
-  - Selected blocks reveal once on entry.
-  - The giant words drift slightly with scroll, and the contact circle grows in as the section arrives. Both use CSS scroll timelines, as progressive enhancement.
-  - The nav pill moves on a critically damped spring.
-  - With reduced motion, all of this is off and nothing is hidden.
+- **Motion system** (the tokens live in `globals.css`):
+  - **Curves:** `--ease-out` for arrivals and hovers; `--ease-in-out` for lines and masks that travel.
+  - **Durations:** 200ms (hover and press), 300ms (nav and surfaces), 560ms (content reveals), 900ms (hero type and image masks).
+  - **Hero entrance** (about 1.16s, never blocks input), in this order:
+    1. the nav fades in
+    2. "Thisula" and "Lewhan." rise out of their lines
+    3. the identity line, intro and actions follow in a stagger
+    4. the bottom hairline draws, then the footer row appears
+  - **Scroll reveals:** `data-reveal` on an element makes it fade and rise 16px once, as its top crosses about 90% of the viewport. There are three variants:
+    - `rise`: a word rises out of its clipping line
+    - `mask`: the portrait is uncovered from the bottom edge
+    - `circle`: the contact circle scales in
+  - **Rule draws:** a `.rule-draw` line inside a revealed element draws in from the left. Anything scrolled past (anchors, fast flings) is shown at once.
+  - **Hover and press:**
+    - Underlines draw in on hover.
+    - Arrows nudge; external links nudge diagonally.
+    - The Skyradix call to action swaps its arrow and lifts.
+    - Buttons press down to 0.975 scale.
+    - The copy-email control confirms in place.
+  - **Nav:** rests lighter at the top of the page, firms up on scroll, turns to dark glass over Skyradix, and its pill moves on a critically damped spring.
+  - **Scroll-linked depth:** desktop only, via CSS scroll timelines. The giant words drift, and the portrait has a 3.5% parallax.
+  - **Fallbacks:** with reduced motion, all of this is off and nothing is hidden. Without JavaScript, nothing is hidden either.
 
 ## Content rule
 This is a personal site for an entrepreneur. There are no projects, research, skills lists or invented business facts.

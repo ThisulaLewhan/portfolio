@@ -23,10 +23,10 @@ export function CopyButton({ value, label, className = "btn btn-line" }: { value
     timer.current = window.setTimeout(() => setState("idle"), 2200);
   };
 
-  const text = state === "copied" ? "Copied" : state === "failed" ? "Copy failed, select the address" : label;
+  const text = state === "copied" ? "Copied" : state === "failed" ? "Couldn’t copy, select the address" : label;
 
   return (
-    <button type="button" onClick={copy} className={className}>
+    <button type="button" onClick={copy} data-state={state} className={className}>
       <span aria-hidden className="relative grid size-4 place-items-center">
         <AnimatePresence mode="wait" initial={false}>
           {state === "copied" ? (
