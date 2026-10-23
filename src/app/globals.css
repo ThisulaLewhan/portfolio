@@ -415,6 +415,31 @@ body {
   }
 }
 
+/* Hero portrait: uncovered from the bottom edge as the name rises */
+.hero-mask {
+  animation: hero-mask var(--dur-4) var(--ease-in-out) both;
+  animation-delay: calc(var(--d, 0) * 1ms);
+}
+.hero-mask-image {
+  animation: hero-settle var(--dur-4) var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * 1ms);
+}
+
+@keyframes hero-mask {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes hero-settle {
+  from {
+    scale: 1.06;
+  }
+}
+
 @keyframes enter-fade {
   from {
     opacity: 0;
@@ -560,7 +585,9 @@ body {
   .rise,
   .fade,
   .enter-fade,
-  .line-in {
+  .line-in,
+  .hero-mask,
+  .hero-mask-image {
     animation: none;
   }
   .js [data-reveal]:not([data-shown]),

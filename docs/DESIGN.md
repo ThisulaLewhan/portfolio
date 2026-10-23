@@ -32,7 +32,7 @@
     4. the bottom hairline draws, then the footer row appears
   - **Scroll reveals:** `data-reveal` on an element makes it fade and rise 16px once, as its top crosses about 90% of the viewport. There are three variants:
     - `rise`: a word rises out of its clipping line
-    - `mask`: the portrait is uncovered from the bottom edge
+    - `mask`: an image is uncovered from the bottom edge
     - `circle`: the contact circle scales in
   - **Rule draws:** a `.rule-draw` line inside a revealed element draws in from the left. Anything scrolled past (anchors, fast flings) is shown at once.
   - **Hover and press:**
@@ -42,7 +42,8 @@
     - Buttons press down to 0.975 scale.
     - The copy-email control confirms in place.
   - **Nav:** rests lighter at the top of the page, firms up on scroll, turns to dark glass over Skyradix, and its pill moves on a critically damped spring.
-  - **Scroll-linked depth:** desktop only, via CSS scroll timelines. The giant words drift, and the portrait has a 3.5% parallax.
+  - **Hero portrait:** fills the last five columns at full hero height, beside a seven-column text block (identity, name, intro). Below 1024px it stacks under the name. It is uncovered from the bottom edge on load.
+  - **Scroll-linked depth:** desktop only, via CSS scroll timelines. The giant words drift.
   - **Fallbacks:** with reduced motion, all of this is off and nothing is hidden. Without JavaScript, nothing is hidden either.
 
 ## Content rule
