@@ -2,7 +2,7 @@
 
 ## Principles
 - **Swiss grid first.** Everything sits on a 12-column grid (4 on phones):
-  - Each section's index and label take columns 1–3; headings and text start at column 4.
+  - Each section's index and label take columns 1 to 3; headings and text start at column 4.
   - The hero is a poster. Details sit small across the top, and the name is set very large along the bottom, with "Lewhan." offset to column 4.
 - **Glass is a material, used in three places:**
   - the floating nav, which switches to dark glass over the Skyradix field

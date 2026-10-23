@@ -426,8 +426,8 @@ body {
 /* The figure has no edge: lit from above at the head, it dissolves into the
    dark toward the shoulders and the bottom, like a single studio light. */
 .hero-figure img {
-  -webkit-mask-image: radial-gradient(ellipse 54% 76% at 44.2% 30%, #000 40%, rgba(0, 0, 0, 0.62) 58%, rgba(0, 0, 0, 0.18) 76%, transparent 93%);
-  mask-image: radial-gradient(ellipse 54% 76% at 44.2% 30%, #000 40%, rgba(0, 0, 0, 0.62) 58%, rgba(0, 0, 0, 0.18) 76%, transparent 93%);
+  -webkit-mask-image: radial-gradient(ellipse 66% 92% at 44.2% 30%, #000 50%, rgba(0, 0, 0, 0.82) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse 66% 92% at 44.2% 30%, #000 50%, rgba(0, 0, 0, 0.82) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%);
 }
 
 /* The suit fades into the dark instead of stopping at an edge */
@@ -435,7 +435,7 @@ body {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 30%;
+  height: 16%;
   z-index: 11;
   pointer-events: none;
   background: linear-gradient(to bottom, transparent, var(--night));
@@ -512,7 +512,7 @@ body {
    ------------------------------------------------------------------ */
 
 /* Hero entrance (~1.1s end to end, never blocks input).
-   Nav 0–250ms, name 40–1000ms, details 280–900ms, footer row ~1100ms. */
+   Nav 0 to 250ms, name 40 to 1000ms, details 280 to 900ms, footer row ~1100ms. */
 .enter-fade {
   animation: enter-fade var(--dur-2) var(--ease-out) both;
   animation-delay: calc(var(--d, 0) * 1ms);

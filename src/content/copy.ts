@@ -28,7 +28,7 @@ export const skyradix = {
   line: "Something of my own.",
   paragraphs: [
     "Skyradix is the business I’m building. It gives me a place to develop ideas, work on things that matter to me, and put what I learn into practice.",
-    "I see it as a long-term journey—one built through good work, honest relationships, and steady progress.",
+    "I see it as a long-term journey, one built through good work, honest relationships, and steady progress.",
   ],
   action: "Visit Skyradix",
 };
@@ -59,7 +59,7 @@ export type Note = { title: string; date: string; href: string; summary?: string
 export const notes = {
   heading: "Notes, occasionally.",
   lead: "A place for thoughts, lessons, and ideas worth sharing.",
-  body: "I may write about business, things I’m learning, or observations that stay with me. Nothing on a schedule—just when I have something worth saying.",
+  body: "I may write about business, things I’m learning, or observations that stay with me. Nothing on a schedule, just when I have something worth saying.",
   /** Add real notes here when they exist; the list appears automatically. */
   items: [] as Note[],
 };
