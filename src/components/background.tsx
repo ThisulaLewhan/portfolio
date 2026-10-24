@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { background } from "@/content/copy";
 import { SectionHead } from "./section-head";
 
@@ -21,6 +22,9 @@ export function Background() {
             className={`relative col-span-4 border-t-2 border-transparent pt-5 md:col-span-3 ${i === 0 ? "md:col-start-4" : ""}`}
           >
             <span aria-hidden className="rule-draw -top-[2px] h-[2px] bg-ink" />
+            <div className="mb-5 flex h-14 items-center">
+              <Image src={item.logo.src} alt={`${item.place} logo`} width={item.logo.w} height={item.logo.h} sizes="160px" className="h-full w-auto max-w-[10rem] object-contain object-left" />
+            </div>
             <p className="text-[1.15rem] leading-snug font-semibold tracking-[-0.02em] [font-family:var(--font-display)]">
               {item.place}
             </p>

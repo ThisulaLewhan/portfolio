@@ -47,9 +47,10 @@ export const background = {
   heading: "A little background.",
   intro: "My education has given me a foundation across business, marketing, and technology.",
   items: [
-    { place: "Royal College, Colombo", detail: "School education." },
-    { place: "SLIM", detail: "Professional Certificate in Marketing." },
-    { place: "Sri Lanka Institute of Information Technology (SLIIT)", detail: "BSc (Hons) in Information Technology." },
+    // Latest first. Logos sit in a fixed-height box, so different shapes line up.
+    { place: "Sri Lanka Institute of Information Technology (SLIIT)", detail: "BSc (Hons) in Information Technology.", logo: { src: "/images/sliit-logo.png", w: 3368, h: 753 } },
+    { place: "Sri Lanka Institute of Marketing (SLIM)", detail: "Professional Certificate in Marketing.", logo: { src: "/images/slim-logo.png", w: 262, h: 125 } },
+    { place: "Royal College, Colombo", detail: "School education.", logo: { src: "/images/rc-logo.png", w: 952, h: 1368 } },
   ],
   closing:
     "These are part of my journey, but they don’t tell the whole story. Much of what I’m learning comes from the people I meet and the things I take on.",
