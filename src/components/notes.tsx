@@ -1,18 +1,19 @@
 import { notes } from "@/content/copy";
 import { ArrowUpRight } from "./icons";
+import { SectionMotion } from "./section-motion";
 import { SectionHead } from "./section-head";
 
 /** Quiet by design. Real notes listed in content/copy.ts appear here automatically. */
 export function Notes() {
   return (
-    <section aria-labelledby="notes-title" className="section frame border-t border-rule">
-      <SectionHead index="07" label="Notes" heading={notes.heading} id="notes-title" />
+    <section id="notes" aria-labelledby="notes-title" className="section frame border-t border-rule">
+      <SectionHead index="07" label="Notes" heading={notes.heading} id="notes-title" motion />
       <div className="grid-12 mt-10 md:mt-14">
         <div className="col-span-4 md:col-span-6 md:col-start-4">
-          <p data-reveal className="t-lead">
+          <p data-g="intro" className="t-lead">
             {notes.lead}
           </p>
-          <p data-reveal style={{ "--d": 120 } as React.CSSProperties} className="measure mt-5 text-ink-2">
+          <p data-g="fade" data-g-delay={150} className="measure mt-5 text-ink-2">
             {notes.body}
           </p>
         </div>
@@ -36,6 +37,7 @@ export function Notes() {
           ))}
         </ul>
       )}
+      <SectionMotion id="notes" fill />
     </section>
   );
 }
