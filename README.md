@@ -36,7 +36,7 @@ Set any contact value in `site.ts` to an empty string and the links that depend 
 
 1. Push this repository to GitHub.
 2. In Vercel, choose **Add New → Project**, import the repository, and keep the detected Next.js settings.
-3. Once you have a production domain, add an environment variable `NEXT_PUBLIC_SITE_URL` (for example `https://thisulalewhan.com`) and redeploy. This turns on canonical URLs, absolute Open Graph URLs, the sitemap entry and the robots sitemap line. Until then, the site falls back to Vercel's production URL.
+3. The canonical domain `https://thisulalewhan.me` is set in `src/config/site.ts` (`SITE_URL`). Canonical URLs, Open Graph, the sitemap, robots.txt and the Person JSON-LD all use it.
 
 Or use the CLI:
 

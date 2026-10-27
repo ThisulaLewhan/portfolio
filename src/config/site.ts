@@ -4,20 +4,13 @@
  */
 
 /**
- * Set NEXT_PUBLIC_SITE_URL (e.g. https://thisulalewhan.com) once a custom
- * domain is in place. Canonical URLs, the sitemap and robots.txt use it;
- * until then they fall back to the Vercel production URL.
+ * The canonical domain. Canonical URLs, Open Graph, the sitemap, robots.txt
+ * and structured data all use it, so search engines never see the Vercel URL.
  */
-function resolveSiteUrl(): string {
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
-  if (explicit) return explicit.replace(/\/$/, "");
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (vercel) return `https://${vercel}`;
-  return "";
-}
+const SITE_URL = "https://thisulalewhan.me";
 
 export const site = {
-  url: resolveSiteUrl(),
+  url: SITE_URL,
   name: "Thisula Lewhan",
   firstName: "Thisula",
   lastName: "Lewhan",
@@ -34,7 +27,7 @@ export const site = {
     src: "/images/hero-thisula.e7b7e830.webp",
     width: 1971,
     height: 2000,
-    alt: "Thisula Lewhan in a dark suit and tie",
+    alt: "Portrait of Thisula Lewhan, founder of Skyradix, in a dark suit and tie",
   },
 
   links: {

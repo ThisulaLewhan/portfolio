@@ -17,14 +17,17 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
-  ...(site.url ? { metadataBase: new URL(site.url), alternates: { canonical: "/" } } : {}),
+  metadataBase: new URL(site.url),
+  alternates: { canonical: "/" },
   title: site.title,
   description: site.description,
+  keywords: ["Thisula Lewhan", "Skyradix", "entrepreneur", "founder", "Colombo", "Sri Lanka"],
   applicationName: site.name,
   authors: [{ name: site.name }],
   creator: site.name,
   openGraph: {
     type: "profile",
+    url: "/",
     title: site.title,
     description: site.description,
     siteName: site.name,
@@ -36,6 +39,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: site.title,
     description: site.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
@@ -51,12 +59,17 @@ const jsFlag = `document.documentElement.classList.add("js");document.documentEl
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${site.url}/#person`,
   name: site.name,
-  ...(site.url ? { url: site.url } : {}),
+  givenName: site.firstName,
+  familyName: site.lastName,
+  url: `${site.url}/`,
+  image: `${site.url}${site.portrait.src}`,
+  description: site.description,
   jobTitle: "Founder",
   worksFor: { "@type": "Organization", name: "Skyradix", url: site.links.skyradix },
   address: { "@type": "PostalAddress", addressLocality: "Colombo", addressCountry: "LK" },
-  sameAs: [site.links.linkedin, site.links.instagram].filter(Boolean),
+  sameAs: [site.links.linkedin, site.links.instagram, "https://github.com/ThisulaLewhan"].filter(Boolean),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

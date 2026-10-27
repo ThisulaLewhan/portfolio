@@ -34,6 +34,7 @@ export function Hero() {
               <span className="text-red">.</span>
             </span>
           </span>
+          <span className="sr-only"> Entrepreneur and founder of Skyradix</span>
         </h1>
 
         {site.portrait.src && (
