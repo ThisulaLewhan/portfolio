@@ -1,10 +1,9 @@
 
 import type { MetadataRoute } from "next";
-import { site } from "@/config/site";
+
+const baseUrl = "https://thisulalewhan.me";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://thisulalewhan.me";
-
   return [
     {
       url: baseUrl,
