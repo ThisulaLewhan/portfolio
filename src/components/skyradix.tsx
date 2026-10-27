@@ -35,7 +35,7 @@ export function Skyradix() {
           </h2>
 
           <div className="grid-12 relative z-10 -mt-[2vw] sm:-mt-[6vw] md:-mt-[8.5vw]">
-            <div data-g="panel" className="glass-dark col-span-4 rounded-[14px] p-7 sm:p-9 md:col-span-7 md:col-start-6 lg:col-span-6 lg:col-start-7">
+            <div data-g="panel" data-tilt className="glass-dark relative col-span-4 rounded-[14px] p-7 sm:p-9 md:col-span-7 md:col-start-6 lg:col-span-6 lg:col-start-7">
               <p className="t-h3">{skyradix.line}</p>
               <div className="mt-6 grid gap-4 text-[1.06rem] leading-relaxed text-night-muted">
                 {skyradix.paragraphs.map((p) => (

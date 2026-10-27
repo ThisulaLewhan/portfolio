@@ -25,6 +25,7 @@
   /* Motion system: two curves, four durations. Nothing else. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* arrivals, hovers */
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* lines and masks that travel */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1); /* hero entrance: a long, soft landing */
   --dur-1: 200ms; /* hover and press */
   --dur-2: 300ms; /* navigation and surfaces */
   --dur-3: 560ms; /* content reveals */
@@ -538,13 +539,14 @@ html[data-surface="dark"] ::-webkit-scrollbar-thumb:hover {
 
 /* The portrait arrives first; the name then rises from behind it */
 .hero-figure img {
-  animation: portrait-in 700ms var(--ease-out) both;
+  animation: portrait-in 1200ms var(--ease-smooth) both;
+  will-change: transform, opacity;
 }
 
 @keyframes portrait-in {
   from {
     opacity: 0;
-    transform: translateY(2%);
+    transform: translateY(3%) scale(1.025);
   }
 }
 
@@ -562,12 +564,13 @@ html[data-surface="dark"] ::-webkit-scrollbar-thumb:hover {
 
 .rise {
   display: inline-block;
-  animation: rise var(--dur-4) var(--ease-out) both;
+  animation: rise 1400ms var(--ease-smooth) both;
+  will-change: transform;
   animation-delay: calc(var(--d, 0) * 1ms);
 }
 
 .fade {
-  animation: fade var(--dur-3) var(--ease-out) both;
+  animation: fade 1000ms var(--ease-smooth) both;
   animation-delay: calc(var(--d, 0) * 1ms);
 }
 
@@ -781,4 +784,106 @@ html[data-surface="dark"] ::-webkit-scrollbar-thumb:hover {
 
 .skip-link:focus {
   top: 1rem;
+}
+
+/* Pointer glow for tilting glass panels (set from section-motion.tsx; pointer devices only).
+   The light sits between the panel's glass and its content. */
+[data-tilt] {
+  isolation: isolate;
+}
+[data-tilt]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--spot, 0);
+  transition: opacity 400ms var(--ease-out);
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), var(--spot-color, rgba(255, 255, 255, 0.5)), transparent 65%);
+}
+.glass-dark[data-tilt] {
+  --spot-color: rgba(224, 36, 54, 0.4);
+}
+.glass[data-tilt] {
+  --spot-color: rgba(224, 36, 54, 0.13);
+}
+
+/* ------------------------------------------------------------------
+   Accent word: the last word of a heading, set in italic serif
+   ------------------------------------------------------------------ */
+.accent {
+  font-family: var(--font-serif), "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  font-size: 1.1em;
+}
+
+/* ------------------------------------------------------------------
+   Dark glass: the Approach cards. The Skyradix panel material, with a red
+   light that rises from the lower edge and follows the pointer along it.
+   ------------------------------------------------------------------ */
+.ember-card {
+  position: relative;
+  border-radius: 22px;
+  padding: clamp(1.4rem, 2.2vw, 2.1rem);
+  /* The same material as the Skyradix panel (.glass-dark): neutral dark glass, red only as the light */
+  background-color: rgba(26, 26, 26, 0.7);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 30px 60px -30px rgba(0, 0, 0, 0.7);
+}
+.ember-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(70% 55% at var(--mx, 50%) 112%, rgba(224, 36, 54, 0.32), transparent 70%);
+  opacity: 0.6;
+  transition: opacity 500ms var(--ease-out);
+}
+.ember-card:hover::after {
+  opacity: 1;
+}
+.ember-card[data-tilt] {
+  --spot-color: rgba(224, 36, 54, 0.4);
+}
+.ember-chip {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 12px;
+  color: var(--red);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  background: rgba(224, 36, 54, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(224, 36, 54, 0.45);
+}
+
+/* Currently: the dial. Ticks are lit by GSAP as the section scrolls. */
+.gauge-tick {
+  stroke: var(--ink);
+}
+
+/* Currently stage: stacked on phones (the dial sticks to the top while the focus
+   areas scroll under it), two columns from md up. Defined here, not with utilities,
+   so it can share the 12-column grid. */
+.dial-stage {
+  display: block;
+}
+@media (min-width: 768px) {
+  .dial-stage {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: center;
+  }
 }

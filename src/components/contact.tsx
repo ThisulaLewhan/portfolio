@@ -33,7 +33,7 @@ export function Contact() {
         />
 
         <div className="grid-12 relative">
-          <div data-g="panel" className="glass col-span-4 rounded-[18px] p-7 sm:p-10 md:col-span-9 md:col-start-4 lg:col-span-7 lg:col-start-4">
+          <div data-g="panel" data-tilt className="glass relative col-span-4 rounded-[18px] p-7 sm:p-10 md:col-span-9 md:col-start-4 lg:col-span-7 lg:col-start-4">
             <div className="grid gap-2 text-[1.12rem] text-ink-2">
               {contact.lines.map((l) => (
                 <p key={l} className="measure">

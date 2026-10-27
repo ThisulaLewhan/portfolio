@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { site } from "@/config/site";
 import { hero } from "@/content/copy";
+import { HeroReplay } from "./hero-replay";
 import { Arrow } from "./icons";
 
 /**
@@ -12,8 +13,9 @@ import { Arrow } from "./icons";
  * Below 1280px the poster keeps the name and portrait, and the details move
  * into a band underneath; below 1024px the name stacks on two lines.
  *
- * Entrance (about 1.2s, nothing waits on it): the portrait settles into place
- * first, then the name rises up from behind it and the details follow.
+ * Entrance (about 1.7s, nothing waits on it): the portrait settles into place
+ * first, then the name rises up from behind it and the details follow. It
+ * plays again whenever you scroll back up to the top (see HeroReplay).
  */
 export function Hero() {
   return (
@@ -97,6 +99,7 @@ export function Hero() {
           </a>
         </div>
       </div>
+      <HeroReplay />
     </section>
   );
 }

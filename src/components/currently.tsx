@@ -1,11 +1,17 @@
 import { currently } from "@/content/copy";
 import { SectionMotion } from "./section-motion";
 import { SectionHead } from "./section-head";
+import { TickGauge } from "./tick-gauge";
 
-/** Same editorial list as Approach, with a one-line introduction. Text lives in content/copy.ts. */
+/**
+ * A dial and three focus areas. On desktop the stage pins while you scroll: the
+ * dial fills, and each focus area comes into focus in turn. Without motion it
+ * reads as a plain list. Text lives in content/copy.ts.
+ */
 export function Currently() {
+  const total = String(currently.items.length).padStart(2, "0");
   return (
-    <section id="currently" aria-labelledby="currently-title" className="section frame border-t border-rule">
+    <section id="currently" aria-labelledby="currently-title" className="section frame">
       <SectionHead index="05" label={currently.label} heading={currently.heading} id="currently-title" motion />
 
       <div className="grid-12 mt-10 md:mt-14">
@@ -14,30 +20,37 @@ export function Currently() {
         </p>
       </div>
 
-      <ol className="relative mt-12 md:mt-16">
-        {/* Frosted pane that glides to the hovered row (pointer devices only) */}
-        <li aria-hidden data-g="lens" className="glass pointer-events-none absolute inset-x-[-1rem] top-0 z-0 h-0 rounded-[14px] opacity-0" />
-        {currently.items.map((v, i) => (
-          <li key={v.title} data-g="row" className="group relative grid-12 gap-y-3 border-t border-transparent py-8 last:border-b md:py-10">
-            <span aria-hidden className="rule-draw -top-px h-px bg-rule" />
-            {i === currently.items.length - 1 && <span aria-hidden className="rule-draw -bottom-px h-px bg-rule" />}
-            <span data-g="num" className="t-meta col-span-4 flex items-center gap-3 pt-[0.55em] text-ink-2 md:col-span-3">
-              <span
-                aria-hidden
-                className="size-2 bg-rule transition-[background-color,transform] duration-300 group-hover:scale-125 group-hover:bg-red"
-              />
-              {String(i + 1).padStart(2, "0")}
+      <div data-g="stage" className="grid-12 mt-14 items-center gap-y-12 md:mt-20">
+        <div className="gauge-wrap relative col-span-4 mx-auto aspect-square w-[min(78vw,24rem)] max-md:hidden md:col-span-5 md:w-full md:max-w-[28rem]">
+          <TickGauge />
+          <div className="absolute inset-0 grid place-content-center text-center">
+            <span data-g="gauge-num" className="t-display text-[clamp(3.5rem,8vw,6rem)] tabular-nums">
+              {total}
             </span>
-            <h3 data-g="rowtitle" className="t-h3 col-span-4 md:col-span-5">
-              {v.title}
-            </h3>
-            <p data-g="body" className="col-span-4 text-ink-2 md:col-span-4 md:pt-[0.35em]">
-              {v.body}
-            </p>
-          </li>
-        ))}
-      </ol>
-      <SectionMotion id="currently" lens fill />
+            <span data-g="gauge-label" className="t-meta mt-3 text-ink-2">
+              focus areas
+            </span>
+          </div>
+        </div>
+
+        <ol data-g="steps" className="col-span-4 md:col-span-6 md:col-start-7">
+          {currently.items.map((v, i) => (
+            <li key={v.title} data-g="step" className="flex items-start gap-5 border-t border-rule py-7 last:border-b md:block md:py-9">
+              {/* Phones: each focus area carries its own small dial, filled as that row scrolls past */}
+              <div data-g="mini" aria-hidden className="relative size-[5.5rem] flex-none md:hidden">
+                <TickGauge count={48} hook="mini-tick" inner={70} />
+                <span className="t-display absolute inset-0 grid place-items-center text-[1.6rem] tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <div>
+                <span className="t-meta text-red-ink max-md:hidden">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="t-h3 md:mt-3">{v.title}</h3>
+                <p className="mt-3 max-w-[44ch] text-ink-2">{v.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <SectionMotion id="currently" fill />
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Inter_Tight } from "next/font/google";
+import { Inter, Inter_Tight, Instrument_Serif } from "next/font/google";
 import { site } from "@/config/site";
 import "./globals.css";
 
@@ -13,6 +13,15 @@ const inter = Inter({
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// One italic serif voice, used only for the accent word in each heading.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
   display: "swap",
 });
 
@@ -77,7 +86,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // The inline script adds a class to <html> before hydration.
     <html
       lang="en"
-      className={`${inter.variable} ${interTight.variable}`}
+      className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
