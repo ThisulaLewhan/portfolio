@@ -6,7 +6,7 @@ import { SectionHead } from "./section-head";
 export function Notes() {
   return (
     <section aria-labelledby="notes-title" className="section frame border-t border-rule">
-      <SectionHead index="06" label="Notes" heading={notes.heading} id="notes-title" />
+      <SectionHead index="07" label="Notes" heading={notes.heading} id="notes-title" />
       <div className="grid-12 mt-10 md:mt-14">
         <div className="col-span-4 md:col-span-6 md:col-start-4">
           <p data-reveal className="t-lead">

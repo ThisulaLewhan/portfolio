@@ -1,6 +1,7 @@
 import { About } from "@/components/about";
 import { Background } from "@/components/background";
 import { Contact, Footer } from "@/components/contact";
+import { Currently } from "@/components/currently";
 import { Hero } from "@/components/hero";
 import { Nav } from "@/components/nav";
 import { Notes } from "@/components/notes";
@@ -18,6 +19,7 @@ export default function Home() {
         <About />
         <Skyradix />
         <Values />
+        <Currently />
         <Background />
         {site.showNotes && <Notes />}
         <Contact />

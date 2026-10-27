@@ -5,7 +5,7 @@ import { SectionHead } from "./section-head";
 export function Background() {
   return (
     <section id="background" aria-labelledby="background-title" className="section frame border-t border-rule">
-      <SectionHead index="05" label="Background" heading={background.heading} id="background-title" />
+      <SectionHead index="06" label="Background" heading={background.heading} id="background-title" />
 
       <div className="grid-12 mt-10 md:mt-14">
         <p data-reveal className="t-lead col-span-4 md:col-span-6 md:col-start-4">

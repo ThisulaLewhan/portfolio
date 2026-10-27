@@ -4,7 +4,7 @@ import { SectionHead } from "./section-head";
 export function Values() {
   return (
     <section aria-labelledby="values-title" className="section frame">
-      <SectionHead index="04" label="Values" heading={values.heading} id="values-title" />
+      <SectionHead index="04" label="Approach" heading={values.heading} id="values-title" />
 
       <ol className="mt-14 md:mt-20">
         {values.items.map((v, i) => (

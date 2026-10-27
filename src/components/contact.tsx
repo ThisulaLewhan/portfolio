@@ -21,7 +21,7 @@ export function Contact() {
 
   return (
     <section id="contact" aria-labelledby="contact-title" className="section frame relative overflow-hidden border-t border-rule">
-      <SectionHead index="07" label="Contact" heading={contact.heading} id="contact-title" />
+      <SectionHead index="08" label="Contact" heading={contact.heading} id="contact-title" />
 
       <div className="relative mt-14 md:mt-20">
         {/* The circle sits on the grid's right edge; the panel overlaps it */}
