@@ -89,7 +89,7 @@ export function Contact() {
 export function Footer() {
   const { email, linkedin, instagram, skyradix } = site.links;
   return (
-    <footer className="frame border-t border-rule py-8">
+    <footer data-reveal-footer className="frame overflow-hidden border-t border-rule bg-paper-2 py-8">
       <div className="grid-12 gap-y-4">
         <p className="t-meta col-span-4 flex items-center gap-3 text-ink-2 md:col-span-6">
           <LogoMark className="h-4 w-auto text-ink" />

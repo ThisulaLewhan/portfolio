@@ -11,6 +11,40 @@ const EASE = "expo.out";
 const RULE_EASE = "power3.inOut";
 const RED = "#e02436";
 
+// Phones: the address bar showing and hiding resizes the viewport; don't re-measure every trigger for it.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
+/**
+ * Paints a dial of ticks for a progress value. Lit ticks fade from bright at the head to `floor`
+ * along a trail of `trail` (a share of the dial). Opacities are quantised and every tick keeps its
+ * last painted value, so a scroll frame only touches the few ticks that changed, not all of them.
+ * Returns the painter and a reset that restores the server-rendered look.
+ */
+function tickPainter(ticks: SVGElement[], trail: number, floor: number) {
+  const rest = ticks.map((t) => t.style.opacity);
+  const painted = ticks.map(() => -1); // -1: at rest
+  const span = ticks.length * trail;
+  const paint = (p: number) => {
+    const lit = p * ticks.length;
+    for (let i = 0; i < ticks.length; i++) {
+      const d = lit - i;
+      const next = d > 0 ? Math.round(Math.max(floor, 1 - d / span) * 20) / 20 : -1;
+      if (next === painted[i]) continue;
+      const t = ticks[i];
+      if (next < 0) {
+        t.style.stroke = "";
+        t.style.opacity = rest[i];
+      } else {
+        if (painted[i] < 0) t.style.stroke = RED;
+        t.style.opacity = String(next);
+      }
+      painted[i] = next;
+    }
+  };
+  const reset = () => paint(0);
+  return { paint, reset };
+}
+
 /**
  * Currently: the dial. Lights its ticks as the stage scrolls and brings each focus area into
  * focus in turn. Desktop only: phones get setupMinis instead. Returns a cleanup that restores the
@@ -23,51 +57,55 @@ function setupGauge(root: HTMLElement) {
   const steps = gsap.utils.toArray<HTMLElement>('[data-g="step"]', stage);
   const num = stage.querySelector<HTMLElement>('[data-g="gauge-num"]');
   const label = stage.querySelector<HTMLElement>('[data-g="gauge-label"]');
-  const rest = { num: num?.textContent ?? "", label: label?.textContent ?? "", tick: ticks.map((t) => t.style.opacity) };
+  const dial = stage.querySelector<SVGElement>("svg");
+  const rest = { num: num?.textContent ?? "", label: label?.textContent ?? "" };
   const total = String(steps.length).padStart(2, "0");
   const dim = 0.28; // opacity of the steps out of focus
+  const painter = tickPainter(ticks, 0.55, 0.4);
   let active = -1;
 
-  const render = (p: number) => {
-    const lit = p * ticks.length;
-    ticks.forEach((t, i) => {
-      const d = lit - i;
-      if (d > 0) {
-        t.style.stroke = RED;
-        // Bright at the head, easing off along the trail.
-        t.style.opacity = String(Math.max(0.4, 1 - d / (ticks.length * 0.55)));
-      } else {
-        t.style.stroke = "";
-        t.style.opacity = rest.tick[i];
-      }
-    });
-    const now = Math.min(steps.length - 1, Math.floor(p * steps.length));
+  // The dial repaints on every frame while pinned: give it its own layer so the text beside it doesn't.
+  if (dial) dial.style.willChange = "transform";
+
+  const focus = (now: number) => {
     if (now === active) return;
+    const forward = now > active;
     active = now;
-    steps.forEach((s, i) => gsap.to(s, { opacity: i === now ? 1 : dim, duration: 0.5, overwrite: true }));
+    steps.forEach((s, i) => {
+      gsap.to(s, { opacity: i === now ? 1 : dim, duration: 0.6, ease: EASE, overwrite: true });
+      // Only the text eases aside, so the rules between the rows stay aligned.
+      gsap.to(s.lastElementChild, { x: i === now ? 0 : 10, duration: 0.6, ease: EASE, overwrite: true });
+    });
     if (num) {
       num.textContent = String(now + 1).padStart(2, "0");
-      gsap.fromTo(num, { yPercent: 30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: EASE, overwrite: true });
+      // The new number arrives from the direction of travel.
+      gsap.fromTo(num, { yPercent: forward ? 35 : -35, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: EASE, overwrite: true });
     }
     if (label) label.textContent = `of ${total}`;
   };
 
-  render(0);
+  painter.paint(0);
+  focus(0);
   ScrollTrigger.create({
     trigger: stage,
-    scrub: 0.4,
+    scrub: 0.5,
     pin: true,
+    anticipatePin: 1,
     start: "center center",
     end: "+=230%",
-    onUpdate: (s) => render(s.progress),
+    onUpdate: (s) => {
+      painter.paint(s.progress);
+      focus(Math.min(steps.length - 1, Math.floor(s.progress * steps.length)));
+    },
   });
 
   return () => {
-    ticks.forEach((t, i) => {
-      t.style.stroke = "";
-      t.style.opacity = rest.tick[i];
+    painter.reset();
+    steps.forEach((s) => {
+      gsap.set(s, { clearProps: "opacity" });
+      gsap.set(s.lastElementChild, { clearProps: "transform" });
     });
-    steps.forEach((s) => gsap.set(s, { clearProps: "opacity" }));
+    if (dial) dial.style.willChange = "";
     if (num) num.textContent = rest.num;
     if (label) label.textContent = rest.label;
   };
@@ -84,20 +122,9 @@ function setupMinis(root: HTMLElement) {
   steps.forEach((step) => {
     const ticks = gsap.utils.toArray<SVGElement>('[data-g="mini-tick"]', step);
     if (!ticks.length) return;
-    const rest = ticks.map((t) => t.style.opacity);
-    const render = (p: number) =>
-      ticks.forEach((t, i) => {
-        const d = p * ticks.length - i;
-        t.style.stroke = d > 0 ? RED : "";
-        t.style.opacity = d > 0 ? String(Math.max(0.45, 1 - d / (ticks.length * 0.6))) : rest[i];
-      });
-    triggers.push(ScrollTrigger.create({ trigger: step, start: "top 82%", end: "bottom 45%", scrub: 0.3, onUpdate: (s) => render(s.progress) }));
-    reset.push(() =>
-      ticks.forEach((t, i) => {
-        t.style.stroke = "";
-        t.style.opacity = rest[i];
-      }),
-    );
+    const painter = tickPainter(ticks, 0.6, 0.45);
+    triggers.push(ScrollTrigger.create({ trigger: step, start: "top 82%", end: "bottom 45%", scrub: 0.3, onUpdate: (s) => painter.paint(s.progress) }));
+    reset.push(painter.reset);
   });
   return () => {
     triggers.forEach((t) => t.kill());
@@ -272,10 +299,12 @@ export function SectionMotion({ id, fill = false }: { id: string; fill?: boolean
       const off: (() => void)[] = [];
       root.querySelectorAll<HTMLElement>("[data-tilt]").forEach((el) => {
         gsap.set(el, { transformPerspective: 900 });
+        // Measure once per hover, not on every pointer move (that forces layout each time).
+        let r = el.getBoundingClientRect();
+        const enter = () => (r = el.getBoundingClientRect());
         const rx = gsap.quickTo(el, "rotationX", { duration: 0.6, ease: "power3.out" });
         const ry = gsap.quickTo(el, "rotationY", { duration: 0.6, ease: "power3.out" });
         const move = (e: PointerEvent) => {
-          const r = el.getBoundingClientRect();
           const px = (e.clientX - r.left) / r.width;
           const py = (e.clientY - r.top) / r.height;
           ry((px - 0.5) * 10);
@@ -289,9 +318,11 @@ export function SectionMotion({ id, fill = false }: { id: string; fill?: boolean
           ry(0);
           el.style.setProperty("--spot", "0");
         };
+        el.addEventListener("pointerenter", enter);
         el.addEventListener("pointermove", move);
         el.addEventListener("pointerleave", leave);
         off.push(() => {
+          el.removeEventListener("pointerenter", enter);
           el.removeEventListener("pointermove", move);
           el.removeEventListener("pointerleave", leave);
           gsap.set(el, { clearProps: "rotationX,rotationY,transformPerspective" });

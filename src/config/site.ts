@@ -40,7 +40,7 @@ export const site = {
   },
 
   /** Hide the Notes section until there's something to show, if you prefer. */
-  showNotes: true,
+  showNotes: false,
 
   copyrightYear: 2026,
 } as const;

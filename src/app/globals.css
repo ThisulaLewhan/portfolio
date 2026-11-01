@@ -435,22 +435,30 @@ html[data-surface="dark"] ::-webkit-scrollbar-thumb:hover {
 }
 
 .hero > * {
-  /* phones: name stacked, portrait centred under it */
+  /* phones: name stacked, portrait centred under it. The face is centred on the
+     screen, and the crown of the head rises just over the foot of "Lewhan.":
+     its baseline sits 1.71 × the font size below the name's top, the hair
+     starts 0.65% down the cut-out, and the head covers the last 0.24 × F. */
   --F: 22cqw;
-  --PH: max(36rem, 178cqw);
   --IH: 112cqw;
   --IW: calc(var(--IH) * 0.9855);
-  --fig-left: calc(50cqw - var(--IW) * 0.442);
+  --name-top: 5.5rem;
+  --fig-top: calc(var(--name-top) + var(--F) * (1.71 - 0.24) - var(--IH) * 0.0065);
+  --PH: calc(var(--fig-top) + var(--IH));
+  --fig-left: calc(50cqw - var(--IW) * 0.4625);
 }
 
 .hero-poster {
   height: var(--PH);
+  /* The portrait drifts down against the scroll (PageMotion); clip it here so
+     its lower edge always stays under the fade below */
+  overflow: clip;
 }
 
 /* Pure white, lit by the same light as the figure: a soft bloom applied to
    the whole line (outside the rise masks, so the glow is never clipped) */
 .hero-name {
-  top: 5.5rem;
+  top: var(--name-top);
   font-size: var(--F);
   line-height: 0.86;
   color: #f7f7f5;
@@ -492,7 +500,6 @@ html[data-surface="dark"] ::-webkit-scrollbar-thumb:hover {
 @media (min-width: 640px) {
   .hero > * {
     --F: 18cqw;
-    --PH: 140cqw;
     --IH: 92cqw;
   }
 }

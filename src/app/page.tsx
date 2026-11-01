@@ -5,6 +5,7 @@ import { Currently } from "@/components/currently";
 import { Hero } from "@/components/hero";
 import { Nav } from "@/components/nav";
 import { Notes } from "@/components/notes";
+import { PageMotion } from "@/components/page-motion";
 import { Reveals } from "@/components/reveals";
 import { Skyradix } from "@/components/skyradix";
 import { Values } from "@/components/values";
@@ -26,6 +27,7 @@ export default function Home() {
       </main>
       <Footer />
       <Reveals />
+      <PageMotion />
     </>
   );
 }

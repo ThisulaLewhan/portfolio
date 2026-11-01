@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Inter_Tight, Instrument_Serif } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site } from "@/config/site";
 import "./globals.css";
 
@@ -103,6 +105,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           // Static, trusted content from site config.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
